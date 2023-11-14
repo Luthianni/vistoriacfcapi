@@ -9,6 +9,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import br.gov.ce.detran.vistoriacfcapi.exception.CpfUniqueViolationException;
 import br.gov.ce.detran.vistoriacfcapi.exception.EntityNotFoundException;
 import br.gov.ce.detran.vistoriacfcapi.exception.PasswordInvalidException;
 import br.gov.ce.detran.vistoriacfcapi.exception.UsernameUniqueViolationException;
@@ -47,7 +48,7 @@ public class ApiExceptionHandler {
                                 .body(new ErrorMessage(request, HttpStatus.NOT_FOUND, ex.getMessage()));
         }
 
-        @ExceptionHandler(UsernameUniqueViolationException.class)
+        @ExceptionHandler({UsernameUniqueViolationException.class, CpfUniqueViolationException.class})
         public ResponseEntity<ErrorMessage> uniqueViolationException(RuntimeException ex, HttpServletRequest request) {
                 log.error("Api Error - ", ex);
                 return ResponseEntity
