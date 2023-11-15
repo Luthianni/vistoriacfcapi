@@ -24,7 +24,7 @@ public class ClienteIT {
                 .post()
                 .uri("api/v1/clientes")
                 .contentType(MediaType.APPLICATION_JSON)
-                .header(JwtAuthentication.getHeaderAuthorization(testClient, "tania@gmail.com", 123456))
+                .headers(JwtAuthentication.getHeaderAuthorization(testClient, "tania@gmail.com", "123456"))
                 .bodyValue(new ClienteCreateDto("Tania Alves", "11284099091"))
                 .exchange()
                 .expectStatus().isCreated()
