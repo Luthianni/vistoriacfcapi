@@ -9,6 +9,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -42,10 +44,12 @@ public class Usuario implements Serializable {
 	
 	@CreatedDate
 	@Column(name = "data_criacao")
+	@DateTimeFormat(iso = ISO.DATE)
 	private LocalDateTime dataCriacao;
 
 	@LastModifiedDate
 	@Column(name = "data_modificacao")
+	@DateTimeFormat(iso = ISO.DATE)
 	private LocalDateTime dataModificacao;
 	
 	@CreatedBy
@@ -58,7 +62,7 @@ public class Usuario implements Serializable {
 	
 	public enum Role {
 	
-		ROLE_ADMIN, ROLE_CLIENTE
+		ROLE_ADMIN, ROLE_CLIENTE, ROLE_SERVIDOR
 	}
 
 	@Override

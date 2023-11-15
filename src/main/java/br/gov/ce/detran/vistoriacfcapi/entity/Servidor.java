@@ -13,11 +13,11 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,35 +27,32 @@ import lombok.Setter;
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
 @Entity
-@Table(name = "endereco")
+@Table(name = "servidor")
 @EntityListeners(AuditingEntityListener.class)
-public class Endereco {
-    
+public class Servidor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "cidade", nullable = false, length = 100)
-    private String cidade;
+    @Column(name = "nome", nullable = false, length = 100 )
+    private String nome;
 
-    @Column(name = "bairro", nullable = false, length = 100)
-    private String bairro;
+    @Column(name = "cpf", nullable = false, length = 11)
+    private String cpf;
 
-    @Column(name = "logradouro", nullable = false, length = 200)
-    private String logradouro;
+    @Column(name = "matricula", nullable = false, length = 6)
+    private String matricula;
 
-    @Column(name = "cep", nullable = false, length = 11)
-    private String cep;
+    @Column(name = "email", nullable = false, length = 100)
+    private String email;
 
-    @Column(name = "numero", nullable = false, length = 10)
-    private String numero;
+    @Column(name = "telefone", nullable = false, length = 11)
+    private String telefone;
 
-    private String complemento;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "tipo_endereco")
-    private TipoEndereco tipoEndereco;
+   @OneToOne
+    @JoinColumn(name = "id_usuario", nullable = false)
+    private Usuario usuario;
 
     @CreatedDate
 	@Column(name = "data_criacao")
@@ -91,7 +88,7 @@ public class Endereco {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Endereco other = (Endereco) obj;
+        Servidor other = (Servidor) obj;
         if (id == null) {
             if (other.id != null)
                 return false;
@@ -102,7 +99,7 @@ public class Endereco {
 
     @Override
     public String toString() {
-        return "Endereco [id=" + id + "]";
+        return "Servidor [id=" + id + "]";
     }
 
     

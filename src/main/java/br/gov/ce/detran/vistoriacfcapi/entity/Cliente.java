@@ -9,7 +9,10 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -35,23 +38,28 @@ public class Cliente implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_endereco", nullable = false)
     private Endereco endereco;
 
     @Column(name = "nome", nullable = false, length = 100)
     private String nome;
+
     @Column(name = "cpf", nullable = false, unique = true, length = 11)
     private String cpf;
+
     @OneToOne
     @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;
+    
     @CreatedDate
 	@Column(name = "data_criacao")
+    @DateTimeFormat(iso = ISO.DATE)
 	private LocalDateTime dataCriacao;
 
 	@LastModifiedDate
 	@Column(name = "data_modificacao")
+    @DateTimeFormat(iso = ISO.DATE)
 	private LocalDateTime dataModificacao;
 	
 	@CreatedBy
