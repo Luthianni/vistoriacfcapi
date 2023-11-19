@@ -48,7 +48,7 @@ public class ClienteController {
 	)
 
     @PostMapping
-    @PreAuthorize("hasRole('CLIENTE')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('SERVIDOR')")
     public ResponseEntity<ClienteResponseDto> create(@RequestBody @Valid ClienteCreateDto dto,
                                                     @AuthenticationPrincipal JwtUserDetails userDetails) {
         Cliente cliente = ClienteMapper.toCliente(dto);

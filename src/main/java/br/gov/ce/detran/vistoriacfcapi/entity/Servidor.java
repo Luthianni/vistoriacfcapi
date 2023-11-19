@@ -51,7 +51,7 @@ public class Servidor {
     private String telefone;
 
    @OneToOne
-    @JoinColumn(name = "id_usuario", nullable = false)
+    @JoinColumn(name = "id_usuario_fk", nullable = false)
     private Usuario usuario;
 
     @CreatedDate

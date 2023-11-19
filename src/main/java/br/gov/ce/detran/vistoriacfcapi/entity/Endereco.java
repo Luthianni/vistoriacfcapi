@@ -102,7 +102,19 @@ public class Endereco {
 
     @Override
     public String toString() {
-        return "Endereco [id=" + id + "]";
+        StringBuilder enderecoCompleto = new StringBuilder();
+        enderecoCompleto.append(logradouro)
+                        .append(", nº ")
+                        .append(numero)
+                        .append(", ")
+                        .append(complemento)
+                        .append(" _ ")
+                        .append(bairro)
+                        .append(". ")
+                        .append(cidade)
+                        .append(". CEP: ")
+                        .append(cep);
+        return enderecoCompleto.toString();
     }
 
     

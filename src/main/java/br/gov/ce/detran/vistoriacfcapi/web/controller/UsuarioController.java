@@ -32,7 +32,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-@Tag(name = "Usuarios", description= "Contém todas as operações relativas aos reecursos para cadastro, edição e leitura de um usuário.")
+@Tag(name = "Usuarios", description= "Contém todas as operações relativas aos recursos para cadastro, edição e leitura de um usuário.")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("api/v1/usuarios")
@@ -74,7 +74,7 @@ public class UsuarioController {
 	
 	
 	@GetMapping("/{id}")
-	@PreAuthorize("hasRole('ADMIN') OR (hasRole('CLIENTE') AND #id == authentication.principal.id)")
+	@PreAuthorize("hasRole('ADMIN') OR (hasRole('SERVIDOR') AND #id == authentication.principal.id)")
 	public ResponseEntity<UsuarioResponseDto> getById(@PathVariable Long id) {
 		Usuario user = usuarioService.buscarPorId(id);
 		return ResponseEntity.ok(UsuarioMapper.toDto(user));
@@ -97,7 +97,7 @@ public class UsuarioController {
 	)
 	
 	@PatchMapping("/{id}")
-	@PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE') AND (#id == authentication.principal.id)")
+	@PreAuthorize("hasAnyRole('ADMIN', 'SERVIDOR') AND (#id == authentication.principal.id)")
 	public ResponseEntity<Void> updatePassword(@PathVariable Long id, @Valid @RequestBody UsuarioSenhaDto dto) {
 		usuarioService.editarSenha(id, dto.getSenhaAtual(), dto.getNovaSenha(), dto.getConfirmaSenha());
 		return ResponseEntity.noContent().build();
@@ -115,7 +115,7 @@ public class UsuarioController {
 	)
 	
 	@GetMapping
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('SERVIDOR')")
 	public ResponseEntity<List<UsuarioResponseDto>> getAll() {
 		List<Usuario> users = usuarioService.buscarTodos();
 		return ResponseEntity.ok(UsuarioMapper.toListDto(users));
