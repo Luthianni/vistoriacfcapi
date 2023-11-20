@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import br.gov.ce.detran.vistoriacfcapi.entity.Cliente;
 import br.gov.ce.detran.vistoriacfcapi.exception.CpfUniqueViolationException;
 import br.gov.ce.detran.vistoriacfcapi.repository.ClienteRepository;
-
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -25,6 +25,12 @@ public class ClienteService {
                 String.format("CPF '%s' não pode ser cadastrado, já existe no sistema", cliente.getCpf())
                 );
         }
+    }
+
+    @Transactional(readOnly = true)
+    public Cliente buscarPorId(Long id) {
+        return ClienteRepository.findById(id).orElseThrow(
+            () -> new EntityNotFoundException(String.format("Cliente id=%s não encontrado no sistema", id))); 
     }
 
 }

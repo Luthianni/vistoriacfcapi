@@ -20,7 +20,7 @@ public class ClienteIT {
     
     @Test
     public void criarCliente_ComDadosValidos_RetornarClienteComStatus201() {
-        testClient
+        ClienteResponseDto responseBody = testClient
                 .post()
                 .uri("api/v1/clientes")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -30,5 +30,10 @@ public class ClienteIT {
                 .expectStatus().isCreated()
                 .expectBody(ClienteResponseDto.class)
                 .returnResult().getResponseBody();
+
+                org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
+                org.assertj.core.api.Assertions.assertThat(responseBody.getId()).isNotNull();
+                org.assertj.core.api.Assertions.assertThat(responseBody.getNome()).isEqualTo("Tania Alves");
+                org.assertj.core.api.Assertions.assertThat(responseBody.getCpf()).isEqualTo("11284099091");
     }
 }
