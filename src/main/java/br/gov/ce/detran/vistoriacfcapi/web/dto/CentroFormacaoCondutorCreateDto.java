@@ -11,7 +11,7 @@ import lombok.Setter;
 
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
-public class ClienteCreateDto {
+public class CentroFormacaoCondutorCreateDto {
     
     @NotBlank
     @Size(min = 5, max = 100)

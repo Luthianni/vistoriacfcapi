@@ -2,7 +2,9 @@ package br.gov.ce.detran.vistoriacfcapi.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
+
 
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -21,6 +23,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -30,17 +33,17 @@ import lombok.Setter;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 @Entity
-@Table(name = "clientes")
+@Table(name = "Cfc")
 @EntityListeners(AuditingEntityListener.class)
-public class Cliente implements Serializable {
+public class CentroFormacaoCondutor implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-  //  @OneToOne(cascade = CascadeType.ALL)
-  //  @JoinColumn(name = "id_endereco", nullable = false)
-  //  private Endereco endereco;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_endereco_fk", nullable = false)
+    private List <Endereco> enderecos;
 
     @Column(name = "nome", nullable = false, length = 100)
     private String nome;
@@ -71,18 +74,36 @@ public class Cliente implements Serializable {
 	private String modificadopor;
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        
-        Cliente cliente = (Cliente) o;
-        return Objects.equals(id, cliente.id);
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        return result;
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id);
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        CentroFormacaoCondutor other = (CentroFormacaoCondutor) obj;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        return true;
     }
+
+    @Override
+    public String toString() {
+        return "CentroFormacaoCondutor [id=" + id + "]";
+    }
+
+    
     
     
 }

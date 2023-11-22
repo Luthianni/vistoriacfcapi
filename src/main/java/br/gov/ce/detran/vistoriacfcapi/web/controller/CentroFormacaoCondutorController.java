@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.gov.ce.detran.vistoriacfcapi.entity.Cliente;
+import br.gov.ce.detran.vistoriacfcapi.entity.CentroFormacaoCondutor;
 import br.gov.ce.detran.vistoriacfcapi.jwt.JwtUserDetails;
-import br.gov.ce.detran.vistoriacfcapi.service.ClienteService;
+import br.gov.ce.detran.vistoriacfcapi.service.CentroFormacaoCondutorService;
 import br.gov.ce.detran.vistoriacfcapi.service.UsuarioService;
-import br.gov.ce.detran.vistoriacfcapi.web.dto.ClienteCreateDto;
-import br.gov.ce.detran.vistoriacfcapi.web.dto.ClienteResponseDto;
-import br.gov.ce.detran.vistoriacfcapi.web.dto.mapper.ClienteMapper;
+import br.gov.ce.detran.vistoriacfcapi.web.dto.CentroFormacaoCondutorCreateDto;
+import br.gov.ce.detran.vistoriacfcapi.web.dto.CentroFormacaoCondutorResponseDto;
+import br.gov.ce.detran.vistoriacfcapi.web.dto.mapper.CentroFormacaoCondutorMapper;
 import br.gov.ce.detran.vistoriacfcapi.web.exception.ErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -30,16 +30,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("api/v1/clientes")
-public class ClienteController {
+public class CentroFormacaoCondutorController {
   
-    private final ClienteService clienteService;    
+    private final CentroFormacaoCondutorService centroFormacaoCondutorService;    
     private final UsuarioService usuarioService;
 
     @Operation(summary = "Criar um novo cliente", description = "Recurso para criar um novo cliente vinculado a um usuário cadastrado. " +
             "Requisição exige uso de um bearer token. Acesso restrito a Role='CLIENTE'",
 			responses = {
 				@ApiResponse(responseCode = "201", description = "Recurso criado com sucesso", 
-				content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = ClienteResponseDto.class))),
+				content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = CentroFormacaoCondutorResponseDto.class))),
 				@ApiResponse(responseCode = "409", description = "Cliente CPF já possui cadastrado no sistema",
 						content = @Content(mediaType = "Application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
 				@ApiResponse(responseCode = "422", description = "Recurso não processados por falta de dados ou dados invalidos",
@@ -51,17 +51,17 @@ public class ClienteController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN') or hasRole('SERVIDOR')")
-    public ResponseEntity<ClienteResponseDto> create(@RequestBody @Valid ClienteCreateDto dto,
+    public ResponseEntity<CentroFormacaoCondutorResponseDto> create(@RequestBody @Valid CentroFormacaoCondutorCreateDto dto,
                                                     @AuthenticationPrincipal JwtUserDetails userDetails) {
-        Cliente cliente = ClienteMapper.toCliente(dto);
-        cliente.setUsuario(usuarioService.buscarPorId(userDetails.getId()));
-        clienteService.salvar(cliente);
-        return ResponseEntity.status(201).body(ClienteMapper.toDto(cliente));
+        CentroFormacaoCondutor centroFormacaoCondutor = CentroFormacaoCondutorMapper.toCentroFormacaoCondutor(dto);
+        centroFormacaoCondutor.setUsuario(usuarioService.buscarPorId(userDetails.getId()));
+        centroFormacaoCondutorService.salvar(centroFormacaoCondutor);
+        return ResponseEntity.status(201).body(CentroFormacaoCondutorMapper.toDto(centroFormacaoCondutor));
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<ClienteResponseDto> getById(@PathVariable Long id) {
-        Cliente cliente = clienteService.buscarPorId(id);
-        return ResponseEntity.ok(ClienteMapper.toDto(cliente));
+    public ResponseEntity<CentroFormacaoCondutorResponseDto> getById(@PathVariable Long id) {
+        CentroFormacaoCondutor centroFormacaoCondutor = centroFormacaoCondutorService.buscarPorId(id);
+        return ResponseEntity.ok(CentroFormacaoCondutorMapper.toDto(centroFormacaoCondutor));
     }
 }

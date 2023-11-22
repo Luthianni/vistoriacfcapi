@@ -4,32 +4,32 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.gov.ce.detran.vistoriacfcapi.entity.Cliente;
+import br.gov.ce.detran.vistoriacfcapi.entity.CentroFormacaoCondutor;
 import br.gov.ce.detran.vistoriacfcapi.exception.CpfUniqueViolationException;
-import br.gov.ce.detran.vistoriacfcapi.repository.ClienteRepository;
+import br.gov.ce.detran.vistoriacfcapi.repository.CentroFormacaoCondutorRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
-public class ClienteService {
+public class CentroFormacaoCondutorService {
     
-    private final ClienteRepository ClienteRepository;
+    private final CentroFormacaoCondutorRepository centroFormacaoCondutorRepository;
 
     @Transactional
-    public Cliente salvar(Cliente cliente) {
+    public CentroFormacaoCondutor salvar(CentroFormacaoCondutor centroFormacaoCondutor) {
         try {
-            return ClienteRepository.save(cliente);
+            return centroFormacaoCondutorRepository.save(centroFormacaoCondutor);
         } catch (DataIntegrityViolationException ex) {
             throw new CpfUniqueViolationException(
-                String.format("CPF '%s' não pode ser cadastrado, já existe no sistema", cliente.getCpf())
+                String.format("CPF '%s' não pode ser cadastrado, já existe no sistema", centroFormacaoCondutor.getCpf())
                 );
         }
     }
 
     @Transactional(readOnly = true)
-    public Cliente buscarPorId(Long id) {
-        return ClienteRepository.findById(id).orElseThrow(
+    public CentroFormacaoCondutor buscarPorId(Long id) {
+        return centroFormacaoCondutorRepository.findById(id).orElseThrow(
             () -> new EntityNotFoundException(String.format("Cliente id=%s não encontrado no sistema", id))); 
     }
 

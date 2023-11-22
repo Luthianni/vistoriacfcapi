@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
-public class ClienteResponseDto {
+public class CentroFormacaoCondutorResponseDto {
     private Long id;
     private String nome;
     private String cpf;

@@ -1,5 +1,6 @@
 package br.gov.ce.detran.vistoriacfcapi.entity;
 
+
 public enum TipoEndereco {
 
     RESIDENCIAL("Residencial"),
