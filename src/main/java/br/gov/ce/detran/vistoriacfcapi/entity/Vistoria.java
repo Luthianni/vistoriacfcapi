@@ -36,7 +36,9 @@ public class Vistoria implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-
+    
+    @Column(name = "status")
+    private StatusVistoria status;
     
     @Column(name = "data_agendada", nullable = false)
     @DateTimeFormat(iso = ISO.DATE)

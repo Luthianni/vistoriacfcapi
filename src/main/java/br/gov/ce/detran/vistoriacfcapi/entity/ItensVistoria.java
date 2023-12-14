@@ -2,6 +2,7 @@ package br.gov.ce.detran.vistoriacfcapi.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -72,6 +73,37 @@ public class ItensVistoria implements Serializable {
 	@LastModifiedBy
 	@Column(name = "modificado_por")
 	private String modificadopor;
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ItensVistoria other = (ItensVistoria) obj;
+		return banheiro == other.banheiro && Objects.equals(criadoPor, other.criadoPor)
+				&& Objects.equals(dataCriacao, other.dataCriacao)
+				&& Objects.equals(dataModificacao, other.dataModificacao) && Objects.equals(id, other.id)
+				&& Objects.equals(modificadopor, other.modificadopor) && Objects.equals(observacao, other.observacao)
+				&& pcd == other.pcd && sala == other.sala && suporte == other.suporte
+				&& treinamento == other.treinamento;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(banheiro, criadoPor, dataCriacao, dataModificacao, id, modificadopor, observacao, pcd, sala,
+				suporte, treinamento);
+	}
+
+	@Override
+	public String toString() {
+		return "ItensVistoria [id=" + id + ", sala=" + sala + ", banheiro=" + banheiro + ", treinamento=" + treinamento
+				+ ", pcd=" + pcd + ", suporte=" + suporte + ", observacao=" + observacao + ", dataCriacao="
+				+ dataCriacao + ", dataModificacao=" + dataModificacao + ", criadoPor=" + criadoPor + ", modificadopor="
+				+ modificadopor + "]";
+	}
 
     
 }
