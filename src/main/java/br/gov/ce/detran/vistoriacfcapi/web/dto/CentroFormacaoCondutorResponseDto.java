@@ -10,6 +10,6 @@ import lombok.Setter;
 public class CentroFormacaoCondutorResponseDto {
     private Long id;
     private String nome;
-    private String cpf;
+    private String cnpj;
     
 }

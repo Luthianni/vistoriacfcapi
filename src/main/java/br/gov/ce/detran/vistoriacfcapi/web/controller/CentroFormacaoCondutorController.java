@@ -26,17 +26,17 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-@Tag(name = "Clientes", description = "Contém todas as operações relativas ao recurso de um cliente")
+@Tag(name = "Cfc", description = "Contém todas as operações relativas ao recurso de um Centro de Formacao de Condutores")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("api/v1/clientes")
+@RequestMapping("api/v1/centroFormacaoCondutores")
 public class CentroFormacaoCondutorController {
   
     private final CentroFormacaoCondutorService centroFormacaoCondutorService;    
     private final UsuarioService usuarioService;
 
-    @Operation(summary = "Criar um novo cliente", description = "Recurso para criar um novo cliente vinculado a um usuário cadastrado. " +
-            "Requisição exige uso de um bearer token. Acesso restrito a Role='CLIENTE'",
+    @Operation(summary = "Criar um novo Centro de Formação de Condutores", description = "Recurso para criar um novo cliente vinculado a um usuário cadastrado. " +
+            "Requisição exige uso de um bearer token.'",
 			responses = {
 				@ApiResponse(responseCode = "201", description = "Recurso criado com sucesso", 
 				content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = CentroFormacaoCondutorResponseDto.class))),
@@ -50,7 +50,7 @@ public class CentroFormacaoCondutorController {
 	)
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN') or hasRole('SERVIDOR')")
+    @PreAuthorize("hasRole('SERVIDOR')")
     public ResponseEntity<CentroFormacaoCondutorResponseDto> create(@RequestBody @Valid CentroFormacaoCondutorCreateDto dto,
                                                     @AuthenticationPrincipal JwtUserDetails userDetails) {
         CentroFormacaoCondutor centroFormacaoCondutor = CentroFormacaoCondutorMapper.toCentroFormacaoCondutor(dto);

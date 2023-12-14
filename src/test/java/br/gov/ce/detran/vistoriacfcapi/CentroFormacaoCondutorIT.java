@@ -11,18 +11,18 @@ import br.gov.ce.detran.vistoriacfcapi.web.dto.CentroFormacaoCondutorCreateDto;
 import br.gov.ce.detran.vistoriacfcapi.web.dto.CentroFormacaoCondutorResponseDto;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Sql(scripts = "/sql/clientes/clientes-insert.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-@Sql(scripts = "/sql/clientes/clientes-delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+@Sql(scripts = "/sql/centroFormacaoCondutores/centroFormacaoCondutores-insert.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = "/sql/centroFormacaoCondutores/centroFormacaoCondutores-delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 public class CentroFormacaoCondutorIT {
 
     @Autowired
     WebTestClient testClient;
     
     @Test
-    public void criarCliente_ComDadosValidos_RetornarClienteComStatus201() {
+    public void criarCfc_ComDadosValidos_RetornarCfcComStatus201() {
         CentroFormacaoCondutorResponseDto responseBody = testClient
                 .post()
-                .uri("api/v1/clientes")
+                .uri("api/v1/centroFormacaoCondutores")
                 .contentType(MediaType.APPLICATION_JSON)
                 .headers(JwtAuthentication.getHeaderAuthorization(testClient, "tania@gmail.com", "123456"))
                 .bodyValue(new CentroFormacaoCondutorCreateDto("Tania Alves", "11284099091"))
@@ -34,6 +34,6 @@ public class CentroFormacaoCondutorIT {
                 org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
                 org.assertj.core.api.Assertions.assertThat(responseBody.getId()).isNotNull();
                 org.assertj.core.api.Assertions.assertThat(responseBody.getNome()).isEqualTo("Tania Alves");
-                org.assertj.core.api.Assertions.assertThat(responseBody.getCpf()).isEqualTo("11284099091");
+                org.assertj.core.api.Assertions.assertThat(responseBody.getCnpj()).isEqualTo("11284099091");
     }
 }

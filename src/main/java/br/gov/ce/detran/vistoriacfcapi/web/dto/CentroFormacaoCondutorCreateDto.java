@@ -1,6 +1,6 @@
 package br.gov.ce.detran.vistoriacfcapi.web.dto;
 
-import org.hibernate.validator.constraints.br.CPF;
+import org.hibernate.validator.constraints.br.CNPJ;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -17,9 +17,9 @@ public class CentroFormacaoCondutorCreateDto {
     @Size(min = 5, max = 100)
     private String nome;
 
-    @Size(min = 11, max = 11)
-    @CPF
-    private String cpf;
+    @Size(min = 14, max = 14)
+    @CNPJ
+    private String cnpj;
 
     
 }

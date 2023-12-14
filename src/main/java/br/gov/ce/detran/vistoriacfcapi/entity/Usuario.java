@@ -18,8 +18,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
-@Getter
-@Setter 
+@Getter @Setter 
 @NoArgsConstructor
 @Entity
 @Table(name = "usuarios")
@@ -40,7 +39,7 @@ public class Usuario implements Serializable {
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "role", nullable = false, length = 25)
-	private Role role = Role.ROLE_CLIENTE;
+	private Role role = Role.ROLE_VISTORIADOR;
 	
 	@CreatedDate
 	@Column(name = "data_criacao")
@@ -62,7 +61,7 @@ public class Usuario implements Serializable {
 	
 	public enum Role {
 	
-		ROLE_ADMIN, ROLE_CLIENTE, ROLE_SERVIDOR
+		ROLE_ADMIN, ROLE_SERVIDOR, ROLE_VISTORIADOR
 	}
 
 	@Override

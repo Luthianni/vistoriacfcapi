@@ -55,6 +55,7 @@ public class UsuarioController {
 	)
 	
 	@PostMapping
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<UsuarioResponseDto> create(@Valid @RequestBody UsuarioCreateDto createDto) {
 		Usuario user = usuarioService.salvar(UsuarioMapper.toUsuario(createDto));
 		return ResponseEntity.status(HttpStatus.CREATED).body(UsuarioMapper.toDto(user));
@@ -74,13 +75,13 @@ public class UsuarioController {
 	
 	
 	@GetMapping("/{id}")
-	@PreAuthorize("hasRole('ADMIN') OR (hasRole('SERVIDOR') AND #id == authentication.principal.id)")
+	@PreAuthorize("hasRole('ADMIN') AND #id == authentication.principal.id)")
 	public ResponseEntity<UsuarioResponseDto> getById(@PathVariable Long id) {
 		Usuario user = usuarioService.buscarPorId(id);
 		return ResponseEntity.ok(UsuarioMapper.toDto(user));
 	}
 
-		@Operation(summary = "Atualizar senha", description = "Requisição exige um Bearer Token. Acesso restrito a ADMIN | CLIENTE ",
+		@Operation(summary = "Atualizar senha", description = "Requisição exige um Bearer Token. Acesso restrito a ADMIN | SERVIDOR ",
 			security = @SecurityRequirement(name = "security"),
 			responses = {
 				@ApiResponse(responseCode = "204", description = "Senha atualizada com sucesso"),
@@ -97,7 +98,7 @@ public class UsuarioController {
 	)
 	
 	@PatchMapping("/{id}")
-	@PreAuthorize("hasAnyRole('ADMIN', 'SERVIDOR') AND (#id == authentication.principal.id)")
+	@PreAuthorize("hasAnyRole('ADMIN') AND (#id == authentication.principal.id)")
 	public ResponseEntity<Void> updatePassword(@PathVariable Long id, @Valid @RequestBody UsuarioSenhaDto dto) {
 		usuarioService.editarSenha(id, dto.getSenhaAtual(), dto.getNovaSenha(), dto.getConfirmaSenha());
 		return ResponseEntity.noContent().build();
@@ -115,7 +116,7 @@ public class UsuarioController {
 	)
 	
 	@GetMapping
-	@PreAuthorize("hasRole('ADMIN') or hasRole('SERVIDOR')")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<List<UsuarioResponseDto>> getAll() {
 		List<Usuario> users = usuarioService.buscarTodos();
 		return ResponseEntity.ok(UsuarioMapper.toListDto(users));

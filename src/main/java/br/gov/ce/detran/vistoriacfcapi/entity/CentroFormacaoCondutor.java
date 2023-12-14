@@ -3,8 +3,6 @@ package br.gov.ce.detran.vistoriacfcapi.entity;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
-
 
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -22,7 +20,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -41,15 +38,15 @@ public class CentroFormacaoCondutor implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_endereco_fk", nullable = false)
     private List <Endereco> enderecos;
 
     @Column(name = "nome", nullable = false, length = 100)
     private String nome;
 
-    @Column(name = "cpf", nullable = false, unique = true, length = 11)
-    private String cpf;
+    @Column(name = "cnpj", nullable = false, unique = true, length = 11)
+    private String cnpj;
 
     @OneToOne
     @JoinColumn(name = "id_usuario_fk", nullable = false)
