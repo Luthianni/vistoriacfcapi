@@ -1,5 +1,7 @@
 package br.gov.ce.detran.vistoriacfcapi.web.controller;
 
+import java.util.HashMap;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.gov.ce.detran.vistoriacfcapi.jwt.JwtToken;
-import br.gov.ce.detran.vistoriacfcapi.jwt.JwtUserDatailsService;
+import br.gov.ce.detran.vistoriacfcapi.jwt.JwtUserDetailsService;
 import br.gov.ce.detran.vistoriacfcapi.web.dto.UsuarioLoginDto;
 import br.gov.ce.detran.vistoriacfcapi.web.dto.UsuarioResponseDto;
 import br.gov.ce.detran.vistoriacfcapi.web.exception.ErrorMessage;
@@ -32,7 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/api/v1")
 public class AutenticacaoController {
 
-    private final JwtUserDatailsService datailsService;
+    private final JwtUserDetailsService datailsService;
     private final AuthenticationManager authenticationManager;
 
     @Operation(summary = "Autenticar na API", description = "Recurso de autenticação na API",
@@ -55,7 +57,15 @@ public class AutenticacaoController {
                 new UsernamePasswordAuthenticationToken(dto.getUsername(),  dto.getPassword());
             authenticationManager.authenticate(authenticationToken);
             JwtToken token = datailsService.getTokenAuthenticated(dto.getUsername());
-            return ResponseEntity.ok(token);            
+            
+            HashMap<Object, Object> response = new HashMap<>();
+            HashMap<Object, Object> result = new HashMap<>();
+            
+            result.put("token", token.getToken());
+
+            response.put("result", result);
+            
+            return ResponseEntity.ok(response);            
         } catch (AuthenticationException ex) {
             log.warn("Bad Credentials from username '{}'", dto.getUsername());
         }

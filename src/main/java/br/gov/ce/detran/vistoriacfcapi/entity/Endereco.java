@@ -1,5 +1,6 @@
 package br.gov.ce.detran.vistoriacfcapi.entity;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.CreatedBy;
@@ -29,7 +30,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "endereco")
 @EntityListeners(AuditingEntityListener.class)
-public class Endereco {
+public class Endereco implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

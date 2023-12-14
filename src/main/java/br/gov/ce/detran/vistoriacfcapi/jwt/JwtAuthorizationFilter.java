@@ -18,7 +18,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
   
     @Autowired
-    private JwtUserDatailsService datailsService;
+    private JwtUserDetailsService detailsService;
 
     @Override
     protected void doFilterInternal(
@@ -47,7 +47,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     }
 
     private void toAuthentication(HttpServletRequest request, String username) {
-        UserDetails userDetails = datailsService.loadUserByUsername(username);
+        UserDetails userDetails = detailsService.loadUserByUsername(username);
 
         UsernamePasswordAuthenticationToken authenticationToken = UsernamePasswordAuthenticationToken
                 .authenticated(userDetails, null, userDetails.getAuthorities());

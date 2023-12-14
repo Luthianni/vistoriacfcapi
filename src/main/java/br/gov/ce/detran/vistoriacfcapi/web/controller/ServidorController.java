@@ -33,8 +33,7 @@ public class ServidorController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ServidorResponseDto> create(@RequestBody @Valid ServidorCreateDto dto,
-                                                      @AuthenticationPrincipal JwtUserDetails userDetails) {
+    public ResponseEntity<ServidorResponseDto> create(@RequestBody @Valid ServidorCreateDto dto, @AuthenticationPrincipal JwtUserDetails userDetails) {
         Servidor servidor = ServidorMapper.toServidor(dto);
         servidor.setUsuario(usuarioService.buscarPorId(userDetails.getId()));
         servidorService.salvar(servidor);

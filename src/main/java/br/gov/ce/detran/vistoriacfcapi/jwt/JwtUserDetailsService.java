@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
-public class JwtUserDatailsService implements UserDetailsService {
+public class JwtUserDetailsService implements UserDetailsService {
 
     private final UsuarioService usuarioService;
 

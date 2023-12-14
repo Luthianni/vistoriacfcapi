@@ -26,7 +26,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-@Tag(name = "Cfc", description = "Contém todas as operações relativas ao recurso de um Centro de Formacao de Condutores")
+@Tag(name = "CFC", description = "Contém todas as operações relativas ao recurso de um Centro de Formacao de Condutores")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("api/v1/centroFormacaoCondutores")
@@ -35,16 +35,16 @@ public class CentroFormacaoCondutorController {
     private final CentroFormacaoCondutorService centroFormacaoCondutorService;    
     private final UsuarioService usuarioService;
 
-    @Operation(summary = "Criar um novo Centro de Formação de Condutores", description = "Recurso para criar um novo cliente vinculado a um usuário cadastrado. " +
+    @Operation(summary = "Criar um novo Centro de Formação de Condutores", description = "Recurso para criar um novo cfc vinculado a um usuário cadastrado. " +
             "Requisição exige uso de um bearer token.'",
 			responses = {
 				@ApiResponse(responseCode = "201", description = "Recurso criado com sucesso", 
 				content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = CentroFormacaoCondutorResponseDto.class))),
-				@ApiResponse(responseCode = "409", description = "Cliente CPF já possui cadastrado no sistema",
+				@ApiResponse(responseCode = "409", description = "CNPJ já possui cadastrado no sistema",
 						content = @Content(mediaType = "Application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
 				@ApiResponse(responseCode = "422", description = "Recurso não processados por falta de dados ou dados invalidos",
 						content = @Content(mediaType = "Application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
-                @ApiResponse(responseCode = "403", description = "Recurso não permiti ao perfil ADMIN",
+                @ApiResponse(responseCode = "403", description = "Recurso não permiti ao perfil SERVIDOR",
                         content = @Content(mediaType = "Application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
 			}
 	)
