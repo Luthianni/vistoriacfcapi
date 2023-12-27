@@ -41,7 +41,7 @@ public class EnderecoController {
             "Requisição exige uso de um bearer token.'",
 			responses = {
 				@ApiResponse(responseCode = "201", description = "Recurso criado com sucesso", 
-				content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = EnderecoResponseDto.class))),
+				content = @Content(mediaType = "Application/json;charset=UTF-8", schema = @Schema(implementation = EnderecoResponseDto.class))),
 				@ApiResponse(responseCode = "409", description = "Endereço já possui cadastrado no sistema",
 						content = @Content(mediaType = "Application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
 				@ApiResponse(responseCode = "422", description = "Recurso não processados por falta de dados ou dados invalidos",
