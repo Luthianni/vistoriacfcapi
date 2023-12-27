@@ -1,5 +1,6 @@
 package br.gov.ce.detran.vistoriacfcapi.web.dto;
 
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -16,6 +17,7 @@ import lombok.ToString;
 @ToString
 public class UsuarioLoginDto {
 
+    
     @NotBlank
     @Email(message = "Formato de e-mail invalido", regexp ="^[a-zA-Z0-9.+]+@[a-zA-Z0-9.-]+\\.[a-z]{2,}$")
     private String username;

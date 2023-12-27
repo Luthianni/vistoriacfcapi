@@ -8,24 +8,27 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.annotation.DateTimeFormat.ISO;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Data;
+import jakarta.validation.constraints.Size;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
-// @Getter @Setter
-// @NoArgsConstructor
-@Data
+@ToString
+@EqualsAndHashCode
+@NoArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "itens_vistorias")
 @EntityListeners(AuditingEntityListener.class)
@@ -36,33 +39,41 @@ public class ItensVistoria implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+    
+    public enum VistoriaStatus {
+    	SIM, NAO
+    }
 
     @Column(name = "salas", nullable = false)
-    private boolean sala;
+    @Enumerated(EnumType.STRING)
+    private VistoriaStatus sala;
 
     @Column(name = "banheiros", nullable = false)
-    private boolean banheiro;
+    @Enumerated(EnumType.STRING)
+    private VistoriaStatus banheiro;
 
     @Column(name = "equipamentos", nullable = false)
-    private boolean treinamento;
+    @Enumerated(EnumType.STRING)
+    private VistoriaStatus treinamento;
 
-    @Column(name = "pcd", nullable = false)
-    private boolean pcd;
+    @Column(name = "portador_deficiencia", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private VistoriaStatus portadorDeficiencia;
 
     @Column(name = "suporte_alunos", nullable = false)
-    private boolean suporte;
+    @Enumerated(EnumType.STRING)
+    private VistoriaStatus suporte;
 
+    @Size(max = 255)
     @Column(name = "observacao")
     private String observacao;
 
     @CreatedDate
 	@Column(name = "data_criacao")
-	@DateTimeFormat(iso = ISO.DATE)
 	private LocalDateTime dataCriacao;
 
 	@LastModifiedDate
 	@Column(name = "data_modificacao")
-	@DateTimeFormat(iso = ISO.DATE)
 	private LocalDateTime dataModificacao;
 	
 	@CreatedBy

@@ -1,28 +1,36 @@
 package br.gov.ce.detran.vistoriacfcapi.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import br.gov.ce.detran.vistoriacfcapi.entity.ItensVistoria;
 import br.gov.ce.detran.vistoriacfcapi.repository.ItensVistoriaRepository;
-import br.gov.ce.detran.vistoriacfcapi.repository.VistoriaRepository;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
+
 @Service
 public class ItensVistoriaService {
 
-    @Autowired
-    private ItensVistoriaRepository itensVistoriaRepository;
-
-    @Autowired
-    private VistoriaRepository vistoriaRepository;
-
-
-    @Transactional
-    public ItensVistoria salvar(ItensVistoria itensVistoria) {
-        
-    }
-    
+   private final ItensVistoriaRepository itensVistoriaRepository;
+   
+   public ItensVistoriaService(ItensVistoriaRepository itensVistoriaRepository) {
+	   this.itensVistoriaRepository = itensVistoriaRepository;
+   }
+   
+   public List<ItensVistoria> getAllItensVistoria() {
+	   return itensVistoriaRepository.findAll();
+	   }
+   
+   public Optional<ItensVistoria> getItensVistoriaById(Long id) {
+	   return itensVistoriaRepository.findById(id);
+   }
+   
+   public ItensVistoria saveItensVistoria(ItensVistoria itensVistoria) {
+   	return itensVistoriaRepository.save(itensVistoria);
+   }
+   
+   public void deleteItensVistoria(Long id ) {
+	   itensVistoriaRepository.deleteById(id);
+   }
 }

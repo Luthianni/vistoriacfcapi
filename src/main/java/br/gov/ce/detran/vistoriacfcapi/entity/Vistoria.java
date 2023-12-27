@@ -20,32 +20,35 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter @Setter
-@NoArgsConstructor
+@Data
 @Entity
 @Table(name = "vistorias")
 @EntityListeners(AuditingEntityListener.class)
 public class Vistoria implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-
     
     @Column(name = "data_agendada", nullable = false)
     @DateTimeFormat(iso = ISO.DATE)
     private LocalDateTime dataAgendada;
 
+    @JoinColumn(name = "id_centroFormacaoCondutor_fk", nullable = false)
+    private CentroFormacaoCondutor centroFormacaoCondutor;
+
     @OneToOne
     @JoinColumn(name = "id_itensvistoria_fk", nullable = false)
-    private ItensVistoria itensVistoria;
-    
+    private ItensVistoria itensVistoria;    
+
+    @OneToOne
+    @JoinColumn(name = "id_servidor_fk", nullable = false)
+    private Servidor servidor;
 
     @CreatedDate
 	@Column(name = "data_criacao")

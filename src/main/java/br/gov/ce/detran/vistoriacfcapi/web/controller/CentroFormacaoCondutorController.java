@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("api/v1/centroFormacaoCondutores")
 public class CentroFormacaoCondutorController {
-  
+
     private final CentroFormacaoCondutorService centroFormacaoCondutorService;    
     private final UsuarioService usuarioService;
 
@@ -50,7 +50,7 @@ public class CentroFormacaoCondutorController {
 	)
 
     @PostMapping
-    @PreAuthorize("hasRole('SERVIDOR')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CentroFormacaoCondutorResponseDto> create(@RequestBody @Valid CentroFormacaoCondutorCreateDto dto,
                                                     @AuthenticationPrincipal JwtUserDetails userDetails) {
         CentroFormacaoCondutor centroFormacaoCondutor = CentroFormacaoCondutorMapper.toCentroFormacaoCondutor(dto);

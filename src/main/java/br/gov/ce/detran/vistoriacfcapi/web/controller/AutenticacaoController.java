@@ -58,10 +58,12 @@ public class AutenticacaoController {
             authenticationManager.authenticate(authenticationToken);
             JwtToken token = datailsService.getTokenAuthenticated(dto.getUsername());
             
+            
             HashMap<Object, Object> response = new HashMap<>();
             HashMap<Object, Object> result = new HashMap<>();
             
-            result.put("token", token.getToken());
+            result.put("username", dto.getUsername());
+            result.put("token", token.getToken());            
 
             response.put("result", result);
             

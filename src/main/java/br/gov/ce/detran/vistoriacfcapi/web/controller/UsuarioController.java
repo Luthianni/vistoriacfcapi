@@ -38,8 +38,8 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("api/v1/usuarios")
 public class UsuarioController {
 	
-	@Autowired
-	private UsuarioService usuarioService;
+	
+	private final UsuarioService usuarioService;
 
 	@Operation(summary = "Criar um novo usuario", description = "Recurso para criar um novo usuario",
 			responses = {

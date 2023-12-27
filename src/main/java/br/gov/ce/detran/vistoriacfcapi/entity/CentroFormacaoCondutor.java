@@ -2,7 +2,6 @@ package br.gov.ce.detran.vistoriacfcapi.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
 
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -21,7 +20,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,27 +32,24 @@ import lombok.Setter;
 @EntityListeners(AuditingEntityListener.class)
 public class CentroFormacaoCondutor implements Serializable {
 
-    @Id
+    private static final long serialVersionUID = 1L;
+
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_endereco_fk", nullable = false)
-    private Endereco endereco;
-
+    
     @Column(name = "nome", nullable = false, length = 100)
     private String nome;
 
-    @Column(name = "cnpj", nullable = false, unique = true, length = 11)
-    private String cnpj;
+    @Column(name = "cnpj", nullable = false, unique = true, length = 14)
+    private String cnpj;   
+    
+    // @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_endereco_fk", nullable = false)
+    private Endereco endereco;
 
-    @OneToOne
     @JoinColumn(name = "id_usuario_fk", nullable = false)
     private Usuario usuario;
-      
-    @OneToMany
-    @JoinColumn(name = "id_itensVistoria_fk", nullable = false)
-    private ItensVistoria itensVistoria;
 
     @CreatedDate
 	@Column(name = "data_criacao")
