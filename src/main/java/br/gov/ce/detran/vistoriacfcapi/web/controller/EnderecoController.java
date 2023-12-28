@@ -1,6 +1,5 @@
 package br.gov.ce.detran.vistoriacfcapi.web.controller;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -55,6 +54,7 @@ public class EnderecoController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<EnderecoResponseDto> create(@RequestBody @Valid EnderecoCreateDto dto,
             @AuthenticationPrincipal JwtUserDetails userDetails) {
+        System.out.println("Recebendo requisição para criar endereço.");
     	System.out.println("DTO recebido:" + dto.toString());
     	Endereco endereco = EnderecoMapper.toEndereco(dto);
         endereco.setUsuario(usuarioService.buscarPorId(userDetails.getId()));
