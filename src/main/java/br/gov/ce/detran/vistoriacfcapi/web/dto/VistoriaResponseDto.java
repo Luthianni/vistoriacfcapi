@@ -1,13 +1,18 @@
 package br.gov.ce.detran.vistoriacfcapi.web.dto;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor @ToString
 public class VistoriaResponseDto {
 
     private Long id;
-    private LocalDateTime dataAgendada;
+    private LocalDate dataAgendada;
     
 }

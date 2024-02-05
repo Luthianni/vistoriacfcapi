@@ -1,8 +1,10 @@
 package br.gov.ce.detran.vistoriacfcapi.web.dto;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +14,8 @@ import lombok.Setter;
 @NoArgsConstructor @AllArgsConstructor
 public class VistoriaCreateDto {
   
-    @NotBlank
-    private LocalDateTime dataAgedada;
+	@NotNull(message = "O campo 'dataAgendada' não pode estar em branco.")
+	@DateTimeFormat(iso = ISO.DATE)
+    private LocalDate dataAgendada;
 
 }

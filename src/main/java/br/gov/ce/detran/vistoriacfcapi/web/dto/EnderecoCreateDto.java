@@ -32,5 +32,6 @@ public class EnderecoCreateDto {
     private TipoEndereco tipoEndereco;
     
     private String complemento;
-
+    
+   
 }

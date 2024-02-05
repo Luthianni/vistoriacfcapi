@@ -11,7 +11,7 @@ import lombok.Setter;
 
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
-public class CentroFormacaoCondutorCreateDto {
+public class CFCCreateDto {
     
     @NotBlank
     @Size(min = 5, max = 100)
@@ -21,5 +21,6 @@ public class CentroFormacaoCondutorCreateDto {
     @CNPJ
     private String cnpj;
 
+   
     
 }

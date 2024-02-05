@@ -2,6 +2,7 @@ package br.gov.ce.detran.vistoriacfcapi.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -11,7 +12,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -19,7 +19,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,9 +28,9 @@ import lombok.Setter;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 @Entity
-@Table(name = "Cfc")
+@Table(name = "cfc")
 @EntityListeners(AuditingEntityListener.class)
-public class CentroFormacaoCondutor implements Serializable {
+public class CFC implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -42,12 +42,9 @@ public class CentroFormacaoCondutor implements Serializable {
     private String nome;
 
     @Column(name = "cnpj", nullable = false, unique = true, length = 14)
-    private String cnpj;   
-    
-    // @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_endereco_fk", nullable = false)
-    private Endereco endereco;
+    private String cnpj;         
 
+    @OneToOne
     @JoinColumn(name = "id_usuario_fk", nullable = false)
     private Usuario usuario;
 
@@ -69,37 +66,28 @@ public class CentroFormacaoCondutor implements Serializable {
 	@Column(name = "modificado_por")
 	private String modificadopor;
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        return result;
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        CentroFormacaoCondutor other = (CentroFormacaoCondutor) obj;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
-            return false;
-        return true;
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CFC other = (CFC) obj;
+		return Objects.equals(id, other.id);
+	}
 
-    @Override
-    public String toString() {
-        return "CentroFormacaoCondutor [id=" + id + "]";
-    }
+	@Override
+	public String toString() {
+		return "CentroFormacaoCondutor [id=" + id + "]";
+	}
 
-    
-    
+       
     
 }

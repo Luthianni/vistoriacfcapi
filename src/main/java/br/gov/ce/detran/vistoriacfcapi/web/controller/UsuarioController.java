@@ -3,7 +3,6 @@ package br.gov.ce.detran.vistoriacfcapi.web.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -55,7 +54,7 @@ public class UsuarioController {
 	)
 	
 	@PostMapping
-	@PreAuthorize("hasRole('ADMIN')")
+	//@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<UsuarioResponseDto> create(@Valid @RequestBody UsuarioCreateDto createDto) {
 		Usuario user = usuarioService.salvar(UsuarioMapper.toUsuario(createDto));
 		return ResponseEntity.status(HttpStatus.CREATED).body(UsuarioMapper.toDto(user));

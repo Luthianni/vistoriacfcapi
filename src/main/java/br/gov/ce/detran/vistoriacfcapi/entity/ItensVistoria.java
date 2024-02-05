@@ -16,6 +16,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
 import lombok.EqualsAndHashCode;
@@ -67,6 +69,10 @@ public class ItensVistoria implements Serializable {
     @Size(max = 255)
     @Column(name = "observacao")
     private String observacao;
+    
+    @OneToOne
+    @JoinColumn(name = "id_vistoria_fk", nullable = false)
+    private Vistoria vistoria; 
 
     @CreatedDate
 	@Column(name = "data_criacao")
@@ -83,6 +89,15 @@ public class ItensVistoria implements Serializable {
 	@LastModifiedBy
 	@Column(name = "modificado_por")
 	private String modificadopor;
+
+	public Object getIdVistoriaFk() {
+		
+		return null;
+	}
+
+    public void setUsuario(Usuario buscarPorId) {        
+        throw new UnsupportedOperationException("Unimplemented method 'setUsuario'");
+    }
 
     
 }

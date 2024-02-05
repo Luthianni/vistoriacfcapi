@@ -20,6 +20,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -27,7 +29,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter @Setter
+@Getter 
+@Setter
 @NoArgsConstructor @AllArgsConstructor
 @Entity
 @Table(name = "endereco")
@@ -57,11 +60,11 @@ public class Endereco implements Serializable{
     private String numero;
 
     private String complemento;
-
+    
     @OneToOne
-    @JoinColumn(name = "id_usuario_fk", nullable = false)
-    private Usuario usuario;
-
+    @JoinColumn(name = "id_cfc_fk", nullable = false)
+    private CFC cFC;
+    
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo_endereco")
     private TipoEndereco tipoEndereco;
@@ -99,6 +102,11 @@ public class Endereco implements Serializable{
                         .append(". CEP: ")
                         .append(cep);
         return enderecoCompleto.toString();
-    }	
+    }
+
+	public void setUsuario(Usuario buscarPorId) {
+		// TODO Auto-generated method stub
+		
+	}
     
 }

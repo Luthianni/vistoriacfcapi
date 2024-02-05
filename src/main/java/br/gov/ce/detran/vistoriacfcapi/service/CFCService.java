@@ -1,37 +1,53 @@
 package br.gov.ce.detran.vistoriacfcapi.service;
 
+
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.gov.ce.detran.vistoriacfcapi.entity.CentroFormacaoCondutor;
+import br.gov.ce.detran.vistoriacfcapi.entity.CFC;
 import br.gov.ce.detran.vistoriacfcapi.exception.CnpjUniqueViolationException;
-import br.gov.ce.detran.vistoriacfcapi.repository.CentroFormacaoCondutorRepository;
+import br.gov.ce.detran.vistoriacfcapi.repository.CFCRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
-public class CentroFormacaoCondutorService {
+public class CFCService {
     
-    private final CentroFormacaoCondutorRepository centroFormacaoCondutorRepository;
+    private final CFCRepository cFCRepository;
 
     @Transactional
-    public CentroFormacaoCondutor salvar(CentroFormacaoCondutor centroFormacaoCondutor) {
-        String cnpj = centroFormacaoCondutor.getCnpj();
+    public CFC salvar(CFC cFC) {
+        String cnpj = cFC.getCnpj();
 
-        if(centroFormacaoCondutorRepository.existsByCnpj(cnpj)) {
+        if(cFCRepository.existsByCnpj(cnpj)) {
             throw new CnpjUniqueViolationException(
                 String.format("CNPJ '%s não pode ser cadastrado, já existe no sistema", cnpj)
             );
         }
 
-        return centroFormacaoCondutorRepository.save(centroFormacaoCondutor);
+        return cFCRepository.save(cFC);
     }
 
     @Transactional(readOnly = true)
-    public CentroFormacaoCondutor buscarPorId(Long id) {
-        return centroFormacaoCondutorRepository.findById(id).orElseThrow(
+    public CFC buscarPorId(Long id) {
+        return cFCRepository.findById(id).orElseThrow(
             () -> new EntityNotFoundException(String.format("CFC id=%s não encontrado no sistema", id))); 
     }
+
+    @Transactional(readOnly = true)
+    public List<CFC> buscarTodos() {
+        return cFCRepository.findAll();
+    }
+    
+    // public CFC obterOuCriarCFC(Long id) {
+    // 	return cFCRepository.findById(id)
+    // 			.orElseGet(() -> {
+    // 				CFC novoCFC = new CFC();
+    // 				return cFCRepository.save(novoCFC);
+    // 			});
+    // }
 
 }
