@@ -7,6 +7,7 @@ import java.time.ZoneId;
 import java.util.Date;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -21,8 +22,9 @@ public class JwtUtils {
 	public static final String JWT_AUTHORIZATION = "Authorization";
 	public static final String SECRET_KEY = "0123456789-0123456789-0123456789";
 	public static final long EXPIRE_DAYS = 0;
-	public static final long EXPIRE_HOURS = 24;
-	public static final long EXPIRE_MINUTES = 0;
+	public static final long EXPIRE_HOURS = 0;
+	public static final long EXPIRE_MINUTES = 30;
+	public static final long REFRESH_EXPIRE_MINUTES = 60 * 24 * 7;
 	
 	private JwtUtils() {
 		
@@ -32,29 +34,44 @@ public class JwtUtils {
 		return Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
 	}
 	
-	private static Date toExpireDate(Date start) {
+	private static Date toExpireDate(Date start, long expirateMinutes) {
 		LocalDateTime dateTime = start.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 		LocalDateTime end = dateTime.plusDays(EXPIRE_DAYS).plusHours(EXPIRE_HOURS).plusMinutes(EXPIRE_MINUTES);
 		return Date.from(end.atZone(ZoneId.systemDefault()).toInstant());
 	}
 
 	public static JwtToken createToken(String username, String role) {
-		Date issuedAt = new Date();
-		Date limit = toExpireDate(issuedAt);
-		
-		String token = Jwts.builder()
-				.setHeaderParam("typ", "JWT")
-				.setSubject(username)
-				.setIssuedAt(issuedAt)
-				.setExpiration(limit)
-				.signWith(generatekey(), SignatureAlgorithm.HS256)
-				.claim("role", role)
-				.compact();
-				
-		return new JwtToken(token);
-	}
-		
-	private static Claims getClaimsFromToken(String token) {
+    String usernameString = String.valueOf(username);
+
+    Date issuedAt = new Date();
+    Date accessTokenExpiration = toExpireDate(issuedAt, EXPIRE_MINUTES);
+    Date refreshTokenExpiration = toExpireDate(issuedAt, REFRESH_EXPIRE_MINUTES);
+
+    String accessToken = buildToken(usernameString, issuedAt, accessTokenExpiration, role, false);
+    String refreshToken = buildToken(usernameString, issuedAt, refreshTokenExpiration, null, true);
+
+    return new JwtToken(accessToken, refreshToken);
+}
+
+private static String buildToken(String subject, Date issuedAt, Date expiration, String role, boolean isRefreshToken) {
+    JwtBuilder jwtBuilder = Jwts.builder()
+            .setHeaderParam("typ", "JWT")
+            .setSubject(subject)
+            .setIssuedAt(issuedAt)
+            .setExpiration(expiration)
+            .signWith(generatekey(), SignatureAlgorithm.HS256);
+
+    if (role != null) {
+        jwtBuilder.claim("role", role);
+    }
+
+    if (isRefreshToken) {
+        jwtBuilder.claim("refresh", true);
+    }
+
+    return jwtBuilder.compact();
+}
+	public static Claims getClaimsFromToken(String token) {
 		try {
 			return Jwts.parserBuilder()
 				.setSigningKey(generatekey()).build()
@@ -88,5 +105,23 @@ public class JwtUtils {
 		}
 		return token;
 	}
+
+	public static boolean isRefreshToken(String refreshToken) {
+		Claims claims = getClaimsFromToken(refreshToken);
+		return claims != null && claims.get("refresh", Boolean.class);
+	}
+	
+	public static boolean isRefreshTokenValid(String refreshToken) {
+		try {
+			Jwts.parserBuilder()
+					.setSigningKey(generatekey()).build()
+					.parseClaimsJws(refactorToken(refreshToken));
+			return true;
+		} catch (JwtException ex) {
+			log.error(String.format("Refresh Token inválido %s", ex.getMessage()));
+		}
+		return false;
+	}
+	
 	
 }

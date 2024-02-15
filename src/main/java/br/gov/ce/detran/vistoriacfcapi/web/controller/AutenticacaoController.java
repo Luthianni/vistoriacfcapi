@@ -9,14 +9,17 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.gov.ce.detran.vistoriacfcapi.jwt.JwtToken;
 import br.gov.ce.detran.vistoriacfcapi.jwt.JwtUserDetailsService;
+import br.gov.ce.detran.vistoriacfcapi.jwt.JwtUtils;
 import br.gov.ce.detran.vistoriacfcapi.web.dto.UsuarioLoginDto;
 import br.gov.ce.detran.vistoriacfcapi.web.dto.UsuarioResponseDto;
 import br.gov.ce.detran.vistoriacfcapi.web.exception.ErrorMessage;
+import io.jsonwebtoken.Claims;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -34,7 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/api/v1")
 public class AutenticacaoController {
 
-    private final JwtUserDetailsService datailsService;
+    private final JwtUserDetailsService detailsService;
     private final AuthenticationManager authenticationManager;
 
     @Operation(summary = "Autenticar na API", description = "Recurso de autenticação na API",
@@ -56,18 +59,19 @@ public class AutenticacaoController {
             UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(dto.getUsername(),  dto.getPassword());
             authenticationManager.authenticate(authenticationToken);
-            JwtToken token = datailsService.getTokenAuthenticated(dto.getUsername());
-            
+            JwtToken token = detailsService.getTokenAuthenticated(dto.getUsername());
+            JwtToken refreshToken = JwtUtils.createToken(dto.getUsername(), "Role"); // Adapte conforme necessário
             
             HashMap<Object, Object> response = new HashMap<>();
             HashMap<Object, Object> result = new HashMap<>();
             
             result.put("username", dto.getUsername());
-            result.put("token", token.getToken());            
-
+            result.put("token", token.getToken());
+            result.put("refreshToken", refreshToken.getRefreshToken());
+            
             response.put("result", result);
             
-            return ResponseEntity.ok(response);            
+            return ResponseEntity.ok(response);          
         } catch (AuthenticationException ex) {
             log.warn("Bad Credentials from username '{}'", dto.getUsername());
         }
@@ -75,5 +79,26 @@ public class AutenticacaoController {
             .badRequest()
             .body(new ErrorMessage(request, HttpStatus.BAD_REQUEST, "Credenciais Invalidas"));
     }
+
+    @PostMapping("/validateToken")
+    public ResponseEntity<?> refresh(@RequestHeader("Authorization") String refreshToken, HttpServletRequest request) {
+        if (JwtUtils.isRefreshTokenValid(refreshToken) && JwtUtils.isRefreshToken(refreshToken)) {
+            // Obtenha informações do refresh token, como o username
+            Claims claims = JwtUtils.getClaimsFromToken(refreshToken);
+            String username = claims.getSubject();
     
+            // Crie um novo access token
+            JwtToken newAccessToken = JwtUtils.createToken(username, "ROLE_USER");
+    
+            // Retorne o novo access token
+            HashMap<Object, Object> response = new HashMap<>();
+            response.put("token", newAccessToken.getToken());
+    
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new ErrorMessage(request, HttpStatus.BAD_REQUEST, "Refresh Token Inválido"));
+        }
+    }
 }
