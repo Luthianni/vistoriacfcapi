@@ -25,7 +25,7 @@ public class AutenticacaoIT {
                 .post()
                 .uri("/api/v1/auth")
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(new UsuarioLoginDto("luthianni@gmail.com", "123456"))
+                .bodyValue(new UsuarioLoginDto(null, "luthianni@gmail.com", "123456"))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(JwtToken.class)
@@ -40,7 +40,7 @@ public class AutenticacaoIT {
                 .post()
                 .uri("/api/v1/auth")
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(new UsuarioLoginDto("invalido@gmail.com", "123456"))
+                .bodyValue(new UsuarioLoginDto(null, "invalido@gmail.com", "123456"))
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectBody(ErrorMessage.class)
@@ -53,7 +53,7 @@ public class AutenticacaoIT {
                 .post()
                 .uri("/api/v1/auth")
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(new UsuarioLoginDto("luthianni@gmail.com", "000000"))
+                .bodyValue(new UsuarioLoginDto(null, "luthianni@gmail.com", "000000"))
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectBody(ErrorMessage.class)
@@ -69,7 +69,7 @@ public class AutenticacaoIT {
                 .post()
                 .uri("/api/v1/auth")
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(new UsuarioLoginDto("", "123456"))
+                .bodyValue(new UsuarioLoginDto(null ,"", "123456"))
                 .exchange()
                 .expectStatus().isEqualTo(422)
                 .expectBody(ErrorMessage.class)
@@ -82,7 +82,7 @@ public class AutenticacaoIT {
                 .post()
                 .uri("/api/v1/auth")
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(new UsuarioLoginDto("@gmail.com", "123456"))
+                .bodyValue(new UsuarioLoginDto(null, "@gmail.com", "123456"))
                 .exchange()
                 .expectStatus().isEqualTo(422)
                 .expectBody(ErrorMessage.class)
@@ -98,7 +98,7 @@ public class AutenticacaoIT {
                 .post()
                 .uri("/api/v1/auth")
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(new UsuarioLoginDto("luthianni@gmail.com", ""))
+                .bodyValue(new UsuarioLoginDto(null, "luthianni@gmail.com", ""))
                 .exchange()
                 .expectStatus().isEqualTo(422)
                 .expectBody(ErrorMessage.class)
@@ -111,7 +111,7 @@ public class AutenticacaoIT {
                 .post()
                 .uri("/api/v1/auth")
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(new UsuarioLoginDto("luthianni@gmail.com", "123"))
+                .bodyValue(new UsuarioLoginDto(null, "luthianni@gmail.com", "123"))
                 .exchange()
                 .expectStatus().isEqualTo(422)
                 .expectBody(ErrorMessage.class)
@@ -124,7 +124,7 @@ public class AutenticacaoIT {
                 .post()
                 .uri("/api/v1/auth")
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(new UsuarioLoginDto("luthianni@gmail.com", "123456789"))
+                .bodyValue(new UsuarioLoginDto(null, "luthianni@gmail.com", "123456789"))
                 .exchange()
                 .expectStatus().isEqualTo(422)
                 .expectBody(ErrorMessage.class)
@@ -132,7 +132,7 @@ public class AutenticacaoIT {
 
         org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
         org.assertj.core.api.Assertions.assertThat(responseBody.getStatus()).isEqualTo(422);
-    }
+        }
 
 
 }

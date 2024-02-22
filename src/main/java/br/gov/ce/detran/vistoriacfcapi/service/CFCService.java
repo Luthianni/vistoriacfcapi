@@ -40,14 +40,6 @@ public class CFCService {
     @Transactional(readOnly = true)
     public List<CFC> buscarTodos() {
         return cFCRepository.findAll();
-    }
-    
-    // public CFC obterOuCriarCFC(Long id) {
-    // 	return cFCRepository.findById(id)
-    // 			.orElseGet(() -> {
-    // 				CFC novoCFC = new CFC();
-    // 				return cFCRepository.save(novoCFC);
-    // 			});
-    // }
-
+    }  
+   
 }

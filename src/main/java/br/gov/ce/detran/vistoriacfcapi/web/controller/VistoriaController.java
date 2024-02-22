@@ -75,7 +75,7 @@ public class VistoriaController {
         HashMap<Object, Object> response = new HashMap<>();
         HashMap<Object, Object> result = new HashMap<>();
 
-        result.put("Data Agendada", dto.getDataAgendada());
+        result.put("DataAgendada", dto.getDataAgendada());
         response.put("result", result);
     	return ResponseEntity.status(HttpStatus.CREATED).body(VistoriaMapper.toDto(vistoria));    
     }

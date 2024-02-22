@@ -60,7 +60,7 @@ public class EnderecoController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<EnderecoResponseDto> create(@RequestBody @Valid EnderecoCreateDto dto,
             @AuthenticationPrincipal JwtUserDetails userDetails) {    
-    	CFC cfc = cfcService.obterOuCriarCFC(userDetails.getId());
+    	CFC cfc = cfcService.buscarPorId(userDetails.getId());
     	Endereco endereco = EnderecoMapper.toEndereco(dto);
         endereco.setUsuario(usuarioService.buscarPorId(userDetails.getId()));
         endereco.setCFC(cfc);

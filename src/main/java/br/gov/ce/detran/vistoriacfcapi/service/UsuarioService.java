@@ -1,6 +1,7 @@
 package br.gov.ce.detran.vistoriacfcapi.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,7 +13,8 @@ import br.gov.ce.detran.vistoriacfcapi.entity.Usuario.Role;
 import br.gov.ce.detran.vistoriacfcapi.exception.EntityNotFoundException;
 import br.gov.ce.detran.vistoriacfcapi.exception.UsernameUniqueViolationException;
 import br.gov.ce.detran.vistoriacfcapi.repository.UsuarioRepository;
-
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 @Service
 public class UsuarioService {
 
@@ -60,13 +62,23 @@ public class UsuarioService {
 	}
 
 	@Transactional(readOnly = true)
-	public Usuario buscarPorUsername(String username) {
-		return usuarioRepository.findByUsername(username).orElseThrow(
-				() -> new EntityNotFoundException(String.format("Usuário com %s não encontrado.", username)));
-	}
+    public Usuario buscarPorUsername(String username) {
+    Optional<Usuario> usuarioOptional = usuarioRepository.findByUsername(username);
+    if (usuarioOptional.isPresent()) {
+        Usuario usuario = usuarioOptional.get();
+        log.info("Usuário encontrado - ID: {}, Username: {}", usuario.getId(), usuario.getUsername());
+        return usuario;
+    } else {
+        log.warn("Usuário não encontrado para o username: {}", username);
+        throw new EntityNotFoundException(String.format("Usuário com %s não encontrado.", username));
+    }
+}
 
 	@Transactional(readOnly = true)
 	public Role buscarRolePorUsername(String username) {
-		return usuarioRepository.findRoleByUsername(username);
+		Optional<Usuario.Role> roleOptional = usuarioRepository.findRoleByUsername(username);
+		
+		return roleOptional.orElseThrow(() -> new RuntimeException("Role não encontrada para o username: " + username));
 	}
+	
 }
