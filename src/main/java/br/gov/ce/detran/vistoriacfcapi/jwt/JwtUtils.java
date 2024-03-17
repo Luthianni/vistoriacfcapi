@@ -7,7 +7,6 @@ import java.time.ZoneId;
 import java.util.Date;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -33,26 +32,26 @@ public class JwtUtils {
 		return Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
 	}
 	
-	private static Date toExpireDate(Date start, long expirateMinutes) {
+	private static Date toExpireDate(Date start) {
 		LocalDateTime dateTime = start.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 		LocalDateTime end = dateTime.plusDays(EXPIRE_DAYS).plusHours(EXPIRE_HOURS).plusMinutes(EXPIRE_MINUTES);
 		return Date.from(end.atZone(ZoneId.systemDefault()).toInstant());
 	}
 
-	public static JwtToken createToken(String username, String role) {
+	public static JwtToken createToken(String username, String role, Long id) {
 		Date issuedAt = new Date();
-		Date limit = toExpireDate(issuedAt);
-		
+		Date expirationDate = toExpireDate(issuedAt);
 		String token = Jwts.builder()
-				.setHeaderParam("typ", "JWT")
+				.setHeaderParam("type", "JWT")
 				.setSubject(username)
+				.claim("id", id) 
 				.setIssuedAt(issuedAt)
-				.setExpiration(limit)
+				.setExpiration(expirationDate)
 				.signWith(generatekey(), SignatureAlgorithm.HS256)
 				.claim("role", role)
 				.compact();
-				
-		return new JwtToken(token);
+	
+		return new JwtToken(token, id);
 	}
 		
 	private static Claims getClaimsFromToken(String token) {
@@ -89,24 +88,6 @@ public class JwtUtils {
 		}
 		return token;
 	}
-
-	public static boolean isRefreshToken(String refreshToken) {
-		Claims claims = getClaimsFromToken(refreshToken);
-		return claims != null && claims.get("refresh", Boolean.class);
-	}
-	
-	public static boolean isRefreshTokenValid(String refreshToken) {
-		try {
-			Jwts.parserBuilder()
-					.setSigningKey(generatekey()).build()
-					.parseClaimsJws(refactorToken(refreshToken));
-			return true;
-		} catch (JwtException ex) {
-			log.error(String.format("Refresh Token inválido %s", ex.getMessage()));
-		}
-		return false;
-	}
-	
 	
 	
 }

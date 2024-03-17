@@ -22,10 +22,10 @@ import org.springframework.web.bind.annotation.RestController;
 import br.gov.ce.detran.vistoriacfcapi.jwt.JwtToken;
 import br.gov.ce.detran.vistoriacfcapi.jwt.JwtUserDetails;
 import br.gov.ce.detran.vistoriacfcapi.jwt.JwtUserDetailsService;
+import br.gov.ce.detran.vistoriacfcapi.service.UsuarioService;
 import br.gov.ce.detran.vistoriacfcapi.web.dto.UsuarioLoginDto;
 import br.gov.ce.detran.vistoriacfcapi.web.dto.UsuarioResponseDto;
 import br.gov.ce.detran.vistoriacfcapi.web.exception.ErrorMessage;
-import io.jsonwebtoken.Claims;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -43,8 +43,9 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/api/v1")
 public class AutenticacaoController {
-
-    private final JwtUserDetailsService datailsService;
+    
+    
+    private final JwtUserDetailsService detailsService;
     private final AuthenticationManager authenticationManager;
     private final UsuarioService usuarioService;
     private static final String secretKey = "0123456789-0123456789-0123456789";
@@ -68,25 +69,102 @@ public class AutenticacaoController {
             UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword());
             authenticationManager.authenticate(authenticationToken);
-            JwtToken token = datailsService.getTokenAuthenticated(dto.getUsername());
-            
-            
+            JwtToken token = detailsService.getTokenAuthenticated(dto.getUsername());
+    
+            // Obtenha o ID do usuário corretamente usando o serviço detailsService ou de onde estiver armazenado
+            Long userId = detailsService.getUserIdByUsername(dto.getUsername());
+    
             HashMap<Object, Object> response = new HashMap<>();
             HashMap<Object, Object> result = new HashMap<>();
             result.put("id", userId);  // Corrigido para usar userId ao invés de dto.getId()
             result.put("username", dto.getUsername());
-            result.put("token", token.getToken());            
-
-            response.put("result", result);
-            
-            return ResponseEntity.ok(response);            
-        } catch (AuthenticationException ex) {
-            log.warn("Bad Credentials from username '{}'", dto.getUsername());
-        }
-        return ResponseEntity
-            .badRequest()
-            .body(new ErrorMessage(request, HttpStatus.BAD_REQUEST, "Credenciais Invalidas"));
-    }
+            result.put("token", token.getToken());
     
+            response.put("result", result);
+    
+            return ResponseEntity.ok(response);
+        } catch (AuthenticationException ex) {
+            log.warn("Credenciais inválidas do usuário '{}'", dto.getUsername());
+            return ResponseEntity
+                .badRequest()
+                .body(new ErrorMessage(request, HttpStatus.BAD_REQUEST, "Credenciais Inválidas"));
+        }
+    }
+
+
+    @SuppressWarnings("deprecation")
+    @PostMapping("/validateToken")
+    public ResponseEntity<?> validateToken(HttpServletRequest request, @RequestHeader("Authorization") String tokenHeader) {
+    try {
+        log.info("Iniciando extração do nome de usuário do token...");
+
+        if (StringUtils.isEmpty(tokenHeader) || !tokenHeader.startsWith("Bearer ")) {
+            return ResponseEntity.badRequest().body(new ErrorMessage(request, HttpStatus.BAD_REQUEST, "Cabeçalho de autorização ausente ou inválido"));
+        }
+
+        String token = StringUtils.substringAfter(tokenHeader, "Bearer ");
+        String username = detailsService.extractUsernameFromToken(token, secretKey);
+
+        log.info("Extração do nome de usuário concluída com sucesso: {}", username);
+
+        if (StringUtils.isBlank(username)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorMessage(request, HttpStatus.UNAUTHORIZED, "Usuário não autenticado"));
+        }
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Verifica se o usuário já está autenticado
+        if (authentication != null && authentication.isAuthenticated()) {
+            if (authentication.getPrincipal() instanceof JwtUserDetails) {
+                JwtUserDetails userDetails = (JwtUserDetails) authentication.getPrincipal();
+
+                // Renova o token com um novo tempo de expiração
+                JwtToken newToken = detailsService.generateToken(userDetails, 20 * 60 * 1000);
+
+                HashMap<String, Object> result = new HashMap<>();
+                result.put("id", userDetails.getId());
+                result.put("username", userDetails.getUsername());
+                result.put("token", newToken.getToken());
+
+                HashMap<String, Object> response = new HashMap<>();
+                response.put("result", result);
+
+                return ResponseEntity.ok(response);
+            } else {
+                // Lidar com outros tipos de UserDetails, se aplicável
+                return ResponseEntity.badRequest().body(new ErrorMessage(request, HttpStatus.BAD_REQUEST, "Tipo de UserDetails desconhecido"));
+            }
+        }
+
+        UserDetails userDetails = this.detailsService.loadUserByUsername(username);
+
+        if (userDetails == null) {
+            return ResponseEntity.badRequest().body(new ErrorMessage(request, HttpStatus.BAD_REQUEST, "Usuário não encontrado"));
+        }
+
+        if (!detailsService.isTokenValid(token, userDetails)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorMessage(request, HttpStatus.UNAUTHORIZED, "Token inválido"));
+        }
+
+        Long userId = detailsService.getUserIdByUsername(username);
+        JwtToken newToken = detailsService.generateToken(userDetails, 20 * 60 * 1000);
+
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("id", userId);
+        result.put("username", userDetails.getUsername());
+        result.put("token", newToken.getToken());
+
+        HashMap<String, Object> response = new HashMap<>();
+        response.put("result", result);
+
+        return ResponseEntity.ok(response);
+    } catch (TransactionException e) {
+        log.error("Erro ao extrair o nome de usuário do token", e);
+        return ResponseEntity.badRequest().body(new ErrorMessage(request, HttpStatus.BAD_REQUEST, "Token inválido"));
+    } catch (Exception e) {
+        log.error("Erro desconhecido", e);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorMessage(request, HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao processar a solicitação"));
+    }
+}
 }
     
