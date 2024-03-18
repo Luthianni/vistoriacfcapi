@@ -36,10 +36,25 @@ public class Usuario implements Serializable {
 	
 	@Column(name = "password", nullable = false, length = 200)
 	private String password;
+
+	@Column(name = "nome", nullable = false, length = 200)
+	private String nome;
+
+	@Column(name = "cpf", nullable = false, length = 11)
+	private String cpf;
+
+	@Column(name = "matricula", nullable = false, length = 6)
+	private String matricula;
+
+	@Column(name = "email", nullable = false, length = 100)
+	private String email;
+
+	@Column(name = "telefone", nullable = false, length = 11)
+	private String telefone;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "role", nullable = false, length = 25)
-	private Role role = Role.ROLE_SERVIDOR;
+	private Role role = Role.ROLE_VISTORIADOR;
 	
 	@CreatedDate
 	@Column(name = "data_criacao")
@@ -61,7 +76,7 @@ public class Usuario implements Serializable {
 	
 	public enum Role {
 	
-		ROLE_ADMIN, ROLE_SERVIDOR, ROLE_VISTORIADOR
+		ROLE_ADMIN, ROLE_VISTORIADOR
 	}
 
 	@Override

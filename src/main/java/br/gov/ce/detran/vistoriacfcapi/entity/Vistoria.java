@@ -20,8 +20,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -45,13 +46,40 @@ public class Vistoria implements Serializable {
     @DateTimeFormat(iso = ISO.DATE)
     private LocalDate dataAgendada;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "id_cfc_fk", nullable = false)
     private CFC cFC;       
 
-    @OneToOne
-    @JoinColumn(name = "id_servidor_fk", nullable = false)
-    private Servidor servidor;
+    @ManyToOne
+    @JoinColumn(name = "id_admin_fk", nullable = false)
+    private Usuario administrador;
+
+	@ManyToOne
+	@JoinColumn(name = "id_vistoriador1_fk", nullable = false)
+	private Usuario vistoriador1;
+
+	@ManyToOne
+	@JoinColumn(name = "id_vistoriador2_fk", nullable = false)
+	private Usuario vistoriador2;
+
+	@Column(name = "salas", nullable = false)
+    private boolean sala;
+
+    @Column(name = "banheiros", nullable = false)
+    private boolean banheiro;
+
+    @Column(name = "equipamentos", nullable = false)
+    private boolean treinamento;
+
+    @Column(name = "portador_deficiencia", nullable = false)
+    private boolean portadorDeficiencia;
+
+    @Column(name = "suporte_alunos", nullable = false)
+    private boolean suporte;
+
+    @Size(max = 255)
+    @Column(name = "observacao")
+    private String observacao;
 
     @CreatedDate
 	@Column(name = "data_criacao")
@@ -71,13 +99,10 @@ public class Vistoria implements Serializable {
 	@Column(name = "modificado_por")
 	private String modificadopor;
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
-	}
+    public void setUsuario(Usuario buscarPorId) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setUsuario'");
+    }
 
-	public void setUsuario(Usuario buscarPorId) {
-		// TODO Auto-generated method stub
-		
-	}	   
+	
 }

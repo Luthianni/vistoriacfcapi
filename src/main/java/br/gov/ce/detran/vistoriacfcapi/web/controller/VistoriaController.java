@@ -12,16 +12,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.gov.ce.detran.vistoriacfcapi.entity.Servidor;
 import br.gov.ce.detran.vistoriacfcapi.entity.Vistoria;
 import br.gov.ce.detran.vistoriacfcapi.jwt.JwtUserDetails;
-import br.gov.ce.detran.vistoriacfcapi.service.ServidorService;
 import br.gov.ce.detran.vistoriacfcapi.service.UsuarioService;
 import br.gov.ce.detran.vistoriacfcapi.service.VistoriaService;
 import br.gov.ce.detran.vistoriacfcapi.web.dto.EnderecoResponseDto;
 import br.gov.ce.detran.vistoriacfcapi.web.dto.VistoriaCreateDto;
 import br.gov.ce.detran.vistoriacfcapi.web.dto.VistoriaResponseDto;
-import br.gov.ce.detran.vistoriacfcapi.web.dto.mapper.ServidorMapper;
 import br.gov.ce.detran.vistoriacfcapi.web.dto.mapper.VistoriaMapper;
 import br.gov.ce.detran.vistoriacfcapi.web.exception.ErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,7 +30,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Tag(name = "Vistoria", description = "Contem todas as operações relativas ao recurso da Vistória.")
@@ -45,7 +41,7 @@ public class VistoriaController {
     
 	private final VistoriaService vistoriaService; 
     private final UsuarioService usuarioService;
-    private final ServidorService servidorService;
+  
     
       @Operation(summary = "Criar uma nova vistoria", description = "Recurso para criar uma nova vistoria vinculado ao CFC e a um usuário cadastrado. " +
             "Requisição exige uso de um bearer token.'",
@@ -66,7 +62,7 @@ public class VistoriaController {
     public ResponseEntity<VistoriaResponseDto> create(@Valid @RequestBody VistoriaCreateDto dto, 
     @AuthenticationPrincipal JwtUserDetails userDetails) {  
      	
-        Servidor servidor = ServidorMapper.toServidor(dto);
+      
     	Vistoria vistoria = VistoriaMapper.toVistoria(dto);    	
     	vistoria.setUsuario(usuarioService.buscarPorId(userDetails.getId()));
         vistoria.setDataAgendada(dto.getDataAgendada());

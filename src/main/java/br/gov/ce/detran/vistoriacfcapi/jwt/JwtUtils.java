@@ -13,7 +13,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 
-@SuppressWarnings("deprecation")
 @Slf4j
 public class JwtUtils {
 	

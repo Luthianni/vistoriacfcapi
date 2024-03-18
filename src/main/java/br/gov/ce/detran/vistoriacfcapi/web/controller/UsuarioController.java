@@ -2,16 +2,19 @@ package br.gov.ce.detran.vistoriacfcapi.web.controller;
 
 
 import java.util.List;
+import java.util.HashMap;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.gov.ce.detran.vistoriacfcapi.entity.Usuario;
@@ -56,7 +59,7 @@ public class UsuarioController {
 	@PostMapping
 	//@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<UsuarioResponseDto> create(@Valid @RequestBody UsuarioCreateDto createDto) {
-		Usuario user = usuarioService.salvar(UsuarioMapper.toUsuario(createDto));
+		Usuario user = usuarioService.salvar(UsuarioMapper.toUsuario(createDto));		
 		return ResponseEntity.status(HttpStatus.CREATED).body(UsuarioMapper.toDto(user));
 	}
 
@@ -75,10 +78,34 @@ public class UsuarioController {
 	
 	@GetMapping("/{id}")	
 	@PreAuthorize("hasRole('ADMIN') OR (#id == authentication.principal.id)")
-	public ResponseEntity<UsuarioResponseDto> getById(@PathVariable Long id) {
-		Usuario user = usuarioService.buscarPorId(id);
-		return ResponseEntity.ok(UsuarioMapper.toDto(user));
-	}
+	public ResponseEntity<?> getById(@PathVariable Long id) {
+		
+					Usuario user = usuarioService.buscarPorId(id);
+			if (user != null) {
+				// Criando um objeto com a estrutura {result: {...}}
+				HashMap<String, Object> result = new HashMap<>();
+				result.put("id", user.getId());
+				result.put("username", user.getUsername());
+				result.put("role", user.getRole());
+				result.put("nome", user.getNome());
+				result.put("cpf", user.getCpf());
+				result.put("matricula", user.getMatricula());
+				result.put("email", user.getEmail());
+				result.put("telefone", user.getTelefone());
+	
+				// Criando o objeto final para retornar
+				HashMap<String, Object> response = new HashMap<>();
+				response.put("result", result);
+	
+				// Retornando o objeto ResponseEntity com os dados do usuário na estrutura especificada
+				return ResponseEntity.ok(response);
+			} else {
+				// Retorna 404 Not Found se o usuário não for encontrado
+				return ResponseEntity.notFound().build();
+			}
+		
+    }
+	
 
 		@Operation(summary = "Atualizar senha", description = "Requisição exige um Bearer Token. Acesso restrito a ADMIN | SERVIDOR ",
 			security = @SecurityRequirement(name = "security"),

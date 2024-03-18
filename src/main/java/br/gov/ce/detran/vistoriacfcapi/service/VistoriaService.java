@@ -41,9 +41,6 @@ public class VistoriaService {
         return vistoriaRepository.findAll();
     }
 
-    // public static Vistoria buscarPorId(Vistoria vistoria) {        
-    //     throw new UnsupportedOperationException("Unimplemented method 'buscarPorId'");
-    // }
     
 
 }

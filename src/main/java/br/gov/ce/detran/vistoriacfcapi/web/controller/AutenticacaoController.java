@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.gov.ce.detran.vistoriacfcapi.jwt.JwtToken;
 import br.gov.ce.detran.vistoriacfcapi.jwt.JwtUserDetails;
 import br.gov.ce.detran.vistoriacfcapi.jwt.JwtUserDetailsService;
-import br.gov.ce.detran.vistoriacfcapi.service.UsuarioService;
+import br.gov.ce.detran.vistoriacfcapi.jwt.JwtUtils;
 import br.gov.ce.detran.vistoriacfcapi.web.dto.UsuarioLoginDto;
 import br.gov.ce.detran.vistoriacfcapi.web.dto.UsuarioResponseDto;
 import br.gov.ce.detran.vistoriacfcapi.web.exception.ErrorMessage;
@@ -36,7 +36,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@SuppressWarnings("deprecation")
 @Tag(name= "Autenticação", description = "Recurso para proceder com a autenticação na API")
 @Slf4j
 @RequiredArgsConstructor
@@ -47,8 +46,7 @@ public class AutenticacaoController {
     
     private final JwtUserDetailsService detailsService;
     private final AuthenticationManager authenticationManager;
-    private final UsuarioService usuarioService;
-    private static final String secretKey = "0123456789-0123456789-0123456789";
+    private static final String SECRET_KEY = JwtUtils.SECRET_KEY;
 
     @Operation(summary = "Autenticar na API", description = "Recurso de autenticação na API",
 			responses = {
@@ -92,7 +90,6 @@ public class AutenticacaoController {
     }
 
 
-    @SuppressWarnings("deprecation")
     @PostMapping("/validateToken")
     public ResponseEntity<?> validateToken(HttpServletRequest request, @RequestHeader("Authorization") String tokenHeader) {
     try {
@@ -103,7 +100,7 @@ public class AutenticacaoController {
         }
 
         String token = StringUtils.substringAfter(tokenHeader, "Bearer ");
-        String username = detailsService.extractUsernameFromToken(token, secretKey);
+        String username = detailsService.extractUsernameFromToken(token, SECRET_KEY);
 
         log.info("Extração do nome de usuário concluída com sucesso: {}", username);
 
@@ -165,6 +162,6 @@ public class AutenticacaoController {
         log.error("Erro desconhecido", e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorMessage(request, HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao processar a solicitação"));
     }
-}
+    }
 }
     

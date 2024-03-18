@@ -18,17 +18,13 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
+
 @RequiredArgsConstructor
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
 
     private final UsuarioService usuarioService;
-
-    // Importar a referência correta para a classe JwtUtils
-    private static final String SECRET_KEY = JwtUtils.SECRET_KEY;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -68,19 +64,6 @@ public class JwtUserDetailsService implements UserDetailsService {
         return false;
     }
 }
-
-    private boolean isTokenExpired(String token) {
-        Date expirationDate = Jwts.parserBuilder()
-                .setSigningKey(SECRET_KEY)
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getExpiration();
-
-                log.info("Token expiration date: " + expirationDate);
-
-        return expirationDate.before(new Date());
-    }
 
     public JwtToken generateToken(UserDetails userDetails, int i) {
         if (userDetails instanceof JwtUserDetails) {
