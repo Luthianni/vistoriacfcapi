@@ -12,9 +12,5 @@ public class UsuarioResponseDto {
     private Long id;
     private String username;
     private String role;
-    private String nome;
-    private String cpf;
-    private String matricula;
-    private String email;
-    private String telefone;
+   
 }

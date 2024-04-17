@@ -1,20 +1,18 @@
 package br.gov.ce.detran.vistoriacfcapi.web.controller;
 
 
-import java.util.List;
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.gov.ce.detran.vistoriacfcapi.entity.Usuario;
@@ -87,11 +85,7 @@ public class UsuarioController {
 				result.put("id", user.getId());
 				result.put("username", user.getUsername());
 				result.put("role", user.getRole());
-				result.put("nome", user.getNome());
-				result.put("cpf", user.getCpf());
-				result.put("matricula", user.getMatricula());
-				result.put("email", user.getEmail());
-				result.put("telefone", user.getTelefone());
+				
 	
 				// Criando o objeto final para retornar
 				HashMap<String, Object> response = new HashMap<>();

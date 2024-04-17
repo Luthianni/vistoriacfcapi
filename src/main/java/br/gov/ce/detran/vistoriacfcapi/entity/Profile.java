@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.JoinColumn;
@@ -15,20 +14,13 @@ import lombok.Setter;
 
 @Getter @Setter
 @Entity
-@Table(name = "cfc")
+@Table(name = "Profile")
 @EntityListeners(AuditingEntityListener.class)
-public class CFC extends Entidade implements Serializable {
+public class Profile extends Pessoa implements Serializable{
 
-    private static final long serialVersionUID = 1L;	
+    private static final long serialVersionUID = 1L;
     
-    @Column(name = "nome", nullable = false, length = 100)
-    private String nome;
-
-    @Column(name = "cnpj", nullable = false, unique = true, length = 14)
-    private String cnpj;         
-
     @OneToOne
     @JoinColumn(name = "id_usuario_fk", nullable = false)
-    private Usuario usuario;   	      
-    
+    private Usuario usuario;
 }

@@ -36,9 +36,10 @@ public class SpringSecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .formLogin(form -> form.disable())
                 .httpBasic(basic -> basic.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "api/v1/usuarios").permitAll()
+                .authorizeHttpRequests(auth -> auth                        
                         .requestMatchers(HttpMethod.POST, "api/v1/auth").permitAll()
+                        .requestMatchers(HttpMethod.POST, "api/v1/usuarios").permitAll()
+                        .requestMatchers(HttpMethod.POST, "api/v1/profile").permitAll()
                         .requestMatchers(HttpMethod.POST, "api/v1/validateToken").permitAll()
                         .requestMatchers(HttpMethod.GET, "api/v1/{id}").authenticated()
                         .requestMatchers(DOCUMENTATION_OPENAPI).permitAll()

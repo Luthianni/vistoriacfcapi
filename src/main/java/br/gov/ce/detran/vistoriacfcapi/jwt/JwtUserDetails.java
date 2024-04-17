@@ -7,6 +7,7 @@ import br.gov.ce.detran.vistoriacfcapi.entity.Usuario;
 
 public class JwtUserDetails extends User {
 
+    
     private Usuario usuario;
 
     public JwtUserDetails(Usuario usuario) {
@@ -22,3 +23,4 @@ public class JwtUserDetails extends User {
         return this.usuario.getRole().name();
     }
 }
+ 
