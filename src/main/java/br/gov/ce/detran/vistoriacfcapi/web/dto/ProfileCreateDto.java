@@ -1,6 +1,5 @@
 package br.gov.ce.detran.vistoriacfcapi.web.dto;
 
-
 import org.hibernate.validator.constraints.br.CPF;
 
 import jakarta.validation.constraints.Email;
@@ -11,29 +10,30 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProfileCreateDto {
-     
-    				
-	@NotBlank
+
+    @NotBlank
     @Size(min = 5, max = 100)
-	private String nome;
+    private String nome;
 
     @NotBlank
     @CPF
-	private String cpf;
+    private String cpf;
 
-	@NotBlank
+    @NotBlank
     @Size(min = 4, max = 6)
-	private String matricula;
+    private String matricula;
 
     @NotBlank
-    @Email(message = "Formato de e-mail invalido", regexp ="^[a-zA-Z0-9.+]+@[a-zA-Z0-9.-]+\\.[a-z]{2,}$")
-	private String email;
+    @Email(message = "Formato de e-mail invalido", regexp = "^[a-zA-Z0-9.+]+@[a-zA-Z0-9.-]+\\.[a-z]{2,}$")
+    private String email;
 
     @NotBlank
-    @Size(min = 8, max = 9)
+    @Size(min = 8, max = 11)
     private String telefone;
 
 }
