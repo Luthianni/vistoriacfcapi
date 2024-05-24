@@ -77,15 +77,26 @@ public class AutenticacaoController {
             result.put("id", userId);  // Corrigido para usar userId ao invés de dto.getId()
             result.put("username", dto.getUsername());
             result.put("token", token.getToken());
+            result.put("status", HttpStatus.OK.value());
+            result.put("message", "Autenticado");
+            result.put("path", request.getRequestURI());
     
             response.put("result", result);
     
             return ResponseEntity.ok(response);
         } catch (AuthenticationException ex) {
             log.warn("Credenciais inválidas do usuário '{}'", dto.getUsername());
-            return ResponseEntity
-                .badRequest()
-                .body(new ErrorMessage(request, HttpStatus.BAD_REQUEST, "Credenciais Inválidas"));
+
+            HashMap<Object, Object> errorResponse = new HashMap<>();
+            HashMap<Object, Object> error = new HashMap<>();
+            error.put("status", HttpStatus.BAD_REQUEST.value());
+            error.put("error", "Bad Request");
+            error.put("message", "Credenciais Inválidas");
+            error.put("path", request.getRequestURI());
+
+            errorResponse.put("error", error);
+
+            return ResponseEntity.badRequest().body(errorResponse);
         }
     }
 
@@ -96,7 +107,15 @@ public class AutenticacaoController {
         log.info("Iniciando extração do nome de usuário do token...");
 
         if (StringUtils.isEmpty(tokenHeader) || !tokenHeader.startsWith("Bearer ")) {
-            return ResponseEntity.badRequest().body(new ErrorMessage(request, HttpStatus.BAD_REQUEST, "Cabeçalho de autorização ausente ou inválido"));
+            
+            HashMap<String, Object> error = new HashMap<>();
+            error.put("error", "Cabeçalho de autorização ausente ou inválido");
+
+            HashMap<String, Object> response = new HashMap<>();
+            response.put("error", error);
+
+            return ResponseEntity.status(400).body(error);
+            
         }
 
         String token = StringUtils.substringAfter(tokenHeader, "Bearer ");
@@ -105,7 +124,15 @@ public class AutenticacaoController {
         log.info("Extração do nome de usuário concluída com sucesso: {}", username);
 
         if (StringUtils.isBlank(username)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorMessage(request, HttpStatus.UNAUTHORIZED, "Usuário não autenticado"));
+
+            HashMap<String, Object> error = new HashMap<>();
+            error.put("error", "Usuário não autenticado");
+
+            HashMap<String, Object> response = new HashMap<>();
+            response.put("error", error);
+
+            return ResponseEntity.status(401).body(error);
+            
         }
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -122,25 +149,50 @@ public class AutenticacaoController {
                 result.put("id", userDetails.getId());
                 result.put("username", userDetails.getUsername());
                 result.put("token", newToken.getToken());
+                result.put("status", HttpStatus.ACCEPTED.value());
+                result.put("message", "Validado");
+                result.put("path", request.getRequestURI());
 
                 HashMap<String, Object> response = new HashMap<>();
                 response.put("result", result);
 
                 return ResponseEntity.ok(response);
             } else {
+
+                HashMap<String, Object> error = new HashMap<>();
+                error.put("error", "Tipo de UserDetails desconhecido");
+
+                HashMap<String, Object> response = new HashMap<>();
+                response.put("error", error);
                 // Lidar com outros tipos de UserDetails, se aplicável
-                return ResponseEntity.badRequest().body(new ErrorMessage(request, HttpStatus.BAD_REQUEST, "Tipo de UserDetails desconhecido"));
+                return ResponseEntity.status(400).body(error);
             }
         }
 
         UserDetails userDetails = this.detailsService.loadUserByUsername(username);
 
         if (userDetails == null) {
-            return ResponseEntity.badRequest().body(new ErrorMessage(request, HttpStatus.BAD_REQUEST, "Usuário não encontrado"));
+
+            HashMap<String, Object> error = new HashMap<>();
+                error.put("error", "Usuário não encontrado");
+
+                HashMap<String, Object> response = new HashMap<>();
+                response.put("error", error);
+                
+            return ResponseEntity.status(400).body(error);
+            
         }
 
         if (!detailsService.isTokenValid(token, userDetails)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorMessage(request, HttpStatus.UNAUTHORIZED, "Token inválido"));
+
+            HashMap<String, Object> error = new HashMap<>();
+                error.put("error", "Token inválido");
+
+                HashMap<String, Object> response = new HashMap<>();
+                response.put("error", error);
+                
+            return ResponseEntity.status(401).body(error);
+            
         }
 
         Long userId = detailsService.getUserIdByUsername(username);
@@ -157,10 +209,19 @@ public class AutenticacaoController {
         return ResponseEntity.ok(response);
     } catch (TransactionException e) {
         log.error("Erro ao extrair o nome de usuário do token", e);
-        return ResponseEntity.badRequest().body(new ErrorMessage(request, HttpStatus.BAD_REQUEST, "Token inválido"));
+        HashMap<String, Object> error = new HashMap<>();
+        HashMap<String, Object> response = new HashMap<>();
+        response.put("error", error);
+        return ResponseEntity.status(400).body(error);
     } catch (Exception e) {
         log.error("Erro desconhecido", e);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorMessage(request, HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao processar a solicitação"));
+        HashMap<String, Object> error = new HashMap<>();
+        HashMap<String, Object> response = new HashMap<>();
+        response.put("error", error);
+        error.put("error", "Erro ao processar a solicitação");
+
+        return ResponseEntity.status(500).body(error);
+        
     }
     }
 }

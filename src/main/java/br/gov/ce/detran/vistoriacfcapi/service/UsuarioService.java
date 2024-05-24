@@ -14,13 +14,14 @@ import br.gov.ce.detran.vistoriacfcapi.exception.EntityNotFoundException;
 import br.gov.ce.detran.vistoriacfcapi.exception.UsernameUniqueViolationException;
 import br.gov.ce.detran.vistoriacfcapi.repository.UsuarioRepository;
 import lombok.extern.slf4j.Slf4j;
+
 @Slf4j
 @Service
 public class UsuarioService {
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
@@ -31,7 +32,7 @@ public class UsuarioService {
 			return usuarioRepository.save(usuario);
 		} catch (org.springframework.dao.DataIntegrityViolationException ex) {
 			throw new UsernameUniqueViolationException(
-					String.format("Username {%s} já cadastrado", usuario.getUsername()));
+					String.format("Username {%s} já esta cadastrado", usuario.getUsername()));
 		}
 
 	}
@@ -62,23 +63,23 @@ public class UsuarioService {
 	}
 
 	@Transactional(readOnly = true)
-    public Usuario buscarPorUsername(String username) {
-    Optional<Usuario> usuarioOptional = usuarioRepository.findByUsername(username);
-    if (usuarioOptional.isPresent()) {
-        Usuario usuario = usuarioOptional.get();
-        log.info("Usuário encontrado - ID: {}, Username: {}", usuario.getId(), usuario.getUsername());
-        return usuario;
-    } else {
-        log.warn("Usuário não encontrado para o username: {}", username);
-        throw new EntityNotFoundException(String.format("Usuário com %s não encontrado.", username));
-    }
-}
+	public Usuario buscarPorUsername(String username) {
+		Optional<Usuario> usuarioOptional = usuarioRepository.findByUsername(username);
+		if (usuarioOptional.isPresent()) {
+			Usuario usuario = usuarioOptional.get();
+			log.info("Usuário encontrado - ID: {}, Username: {}", usuario.getId(), usuario.getUsername());
+			return usuario;
+		} else {
+			log.warn("Usuário não encontrado para o username: {}", username);
+			throw new EntityNotFoundException(String.format("Usuário com %s não encontrado.", username));
+		}
+	}
 
 	@Transactional(readOnly = true)
 	public Role buscarRolePorUsername(String username) {
 		Optional<Usuario.Role> roleOptional = usuarioRepository.findRoleByUsername(username);
-		
+
 		return roleOptional.orElseThrow(() -> new RuntimeException("Role não encontrada para o username: " + username));
 	}
-	
+
 }
