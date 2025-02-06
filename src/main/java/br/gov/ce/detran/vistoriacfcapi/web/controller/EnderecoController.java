@@ -68,10 +68,11 @@ public class EnderecoController {
         HashMap<Object, Object> response = new HashMap<>();
         HashMap<Object, Object> result = new HashMap<>();
 
-        result.put("logradouro", dto.getLogradouro());
+        result.put("endereco", dto.getEndereco());
         result.put("numero", dto.getNumero());
         result.put("bairro", dto.getBairro());
         result.put("cidade", dto.getCidade());
+        result.put("estado", dto.getEstado());
         result.put("cep", dto.getCep());
         result.put("complemento", dto.getComplemento());
 

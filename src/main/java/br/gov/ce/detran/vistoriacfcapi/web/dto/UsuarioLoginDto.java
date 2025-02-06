@@ -18,7 +18,7 @@ public class UsuarioLoginDto {
 
     private Long id;
 
-    @NotBlank
+    //@NotBlank
     @Email(message = "Formato de e-mail invalido", regexp ="^[a-zA-Z0-9.+]+@[a-zA-Z0-9.-]+\\.[a-z]{2,}$")
     private String username;
 

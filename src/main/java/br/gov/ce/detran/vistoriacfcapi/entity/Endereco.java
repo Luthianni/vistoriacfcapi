@@ -27,11 +27,14 @@ public class Endereco extends Entidade implements Serializable{
     @Column(name = "cidade", nullable = false)
     private String cidade;
 
+    @Column(name = "estado", nullable = false)
+    private String estado;
+
     @Column(name = "bairro", nullable = false)
     private String bairro;
 
-    @Column(name = "logradouro", nullable = false)
-    private String logradouro;
+    @Column(name = "endereco", nullable = false)
+    private String endereco;
 
     @Column(name = "cep", nullable = false)
     private String cep;
@@ -42,7 +45,7 @@ public class Endereco extends Entidade implements Serializable{
     private String complemento;
     
     @OneToOne
-    @JoinColumn(name = "id_cfc_fk", nullable = false)
+    @JoinColumn(name = "id_cfc_fk", nullable = true)
     private CFC cFC;
     
     @Enumerated(EnumType.STRING)
@@ -53,7 +56,7 @@ public class Endereco extends Entidade implements Serializable{
     @Override
     public String toString() {
         StringBuilder enderecoCompleto = new StringBuilder();
-        enderecoCompleto.append(logradouro)
+        enderecoCompleto.append(endereco)
                         .append(", nº ")
                         .append(numero)
                         .append(", ")
@@ -62,6 +65,8 @@ public class Endereco extends Entidade implements Serializable{
                         .append(bairro)
                         .append(". ")
                         .append(cidade)
+                        .append(" - ")
+                        .append(estado)
                         .append(". CEP: ")
                         .append(cep);
         return enderecoCompleto.toString();

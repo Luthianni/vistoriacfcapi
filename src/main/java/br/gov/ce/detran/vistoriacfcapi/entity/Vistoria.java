@@ -36,7 +36,7 @@ public class Vistoria extends Entidade implements Serializable {
     private LocalDate dataAgendada;
 
     @ManyToOne
-    @JoinColumn(name = "id_cfc_fk", nullable = false)
+    @JoinColumn(name = "id_cfc_fk", nullable = true)
     private CFC cFC;       
 
     @ManyToOne
@@ -69,6 +69,11 @@ public class Vistoria extends Entidade implements Serializable {
     @Size(max = 255)
     @Column(name = "observacao")
     private String observacao;
+
+    @ManyToOne
+    @JoinColumn(name = "agendamento_id")
+    private Agendamento agendamento;
+
 
     public void setUsuario(Usuario buscarPorId) {
         

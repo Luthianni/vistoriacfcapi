@@ -10,6 +10,7 @@ import br.gov.ce.detran.vistoriacfcapi.entity.Usuario;
 import jakarta.persistence.QueryHint;
 
 
+
 public interface UsuarioRepository extends JpaRepository<Usuario, Long>{
 
     Optional<Usuario> findByUsername(String username);
@@ -17,4 +18,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long>{
     @Query("SELECT u.role FROM Usuario u WHERE u.username = :username")
     @QueryHints(@QueryHint(name = "org.hibernate.readOnly", value = "true"))
     Optional<Usuario.Role> findRoleByUsername(String username);
+
+    
 }

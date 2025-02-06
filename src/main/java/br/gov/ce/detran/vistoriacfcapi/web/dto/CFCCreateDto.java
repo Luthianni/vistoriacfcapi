@@ -13,13 +13,29 @@ import lombok.Setter;
 @NoArgsConstructor @AllArgsConstructor
 public class CFCCreateDto {
     
-    @NotBlank
-    @Size(min = 5, max = 100)
-    private String nome;
-
     @Size(min = 14, max = 14)
     @CNPJ
     private String cnpj;
+
+    @NotBlank
+    @Size(min = 5, max = 100)
+    private String centroDeFormacao;
+
+    @NotBlank
+    @Size(min = 5, max = 100)
+    private String fantasia;    
+
+    @NotBlank
+    @Size(min = 5, max = 100)    
+    private String tipo;
+
+    @NotBlank
+    @Size(min = 5, max = 100)   
+    private String telefone;
+
+    @NotBlank
+    @Size(min = 5, max = 100)   
+    private String email;
 
    
     

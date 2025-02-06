@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 public class VistoriaMapper {
 
     public static Vistoria toVistoria(VistoriaCreateDto dto) {
+
         return new ModelMapper().map(dto, Vistoria.class);
     }
 

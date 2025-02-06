@@ -10,7 +10,11 @@ import lombok.ToString;
 @NoArgsConstructor @AllArgsConstructor @ToString
 public class CFCResponseDto {
     private Long id;
-    private String nome;
     private String cnpj;
+    private String centroDeFormacao;
+    private String fantasia;  
+    private String tipo;
+    private String telefone;
+    private String email;
     
 }

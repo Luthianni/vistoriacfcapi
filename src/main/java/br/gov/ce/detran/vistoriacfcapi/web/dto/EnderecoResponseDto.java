@@ -13,7 +13,8 @@ public class EnderecoResponseDto {
     private Long id;
     private String cidade;
     private String bairro;
-    private String logradouro;
+    private String estado;
+    private String endereco;
     private String cep;
     private String numero;
     private String complemento;

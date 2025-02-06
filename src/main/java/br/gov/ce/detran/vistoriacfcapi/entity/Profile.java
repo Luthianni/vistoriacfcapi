@@ -23,4 +23,6 @@ public class Profile extends Pessoa implements Serializable{
     @OneToOne
     @JoinColumn(name = "id_usuario_fk", nullable = false)
     private Usuario usuario;
+
+
 }

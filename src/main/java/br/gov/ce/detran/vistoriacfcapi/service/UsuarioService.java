@@ -43,6 +43,12 @@ public class UsuarioService {
 				() -> new EntityNotFoundException(String.format("Usuário id=%s não encontrado.", id)));
 	}
 
+	// @Transactional(readOnly = true)
+	// public Optional<Usuario> buscarPorId(Long usuarioId) {
+	// 	return usuarioRepository.findById(usuarioId);  // Assume que você está usando JPA e um repositório para isso
+	// }
+	
+
 	@Transactional
 	public Usuario editarSenha(Long id, String senhaAtual, String novaSenha, String confirmaSenha) {
 		if (!novaSenha.equals(confirmaSenha)) {

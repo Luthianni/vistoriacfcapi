@@ -40,10 +40,14 @@ public class UsuarioController {
 	private final UsuarioService usuarioService;
 
 	@Operation(summary = "Criar um novo usuario", description = "Recurso para criar um novo usuario", responses = {
-			@ApiResponse(responseCode = "201", description = "Recurso criado com sucesso", content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = UsuarioResponseDto.class))),
-			@ApiResponse(responseCode = "409", description = "E-mail de usuário já cadastrado no sistema", content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
-			@ApiResponse(responseCode = "422", description = "Recurso não processados por dados de entrada invalidos", content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
-			@ApiResponse(responseCode = "403", description = "Recurso não permitido ao perfil ADMIN", content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
+			@ApiResponse(responseCode = "201", description = "Recurso criado com sucesso",
+					content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = UsuarioResponseDto.class))),
+			@ApiResponse(responseCode = "409", description = "E-mail de usuário já cadastrado no sistema",
+					content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+			@ApiResponse(responseCode = "422", description = "Recurso não processados por dados de entrada invalidos",
+					content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+			@ApiResponse(responseCode = "403", description = "Recurso não permitido ao perfil ADMIN",
+					content = @Content(mediaType = "application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
 	})
 
 	@PostMapping

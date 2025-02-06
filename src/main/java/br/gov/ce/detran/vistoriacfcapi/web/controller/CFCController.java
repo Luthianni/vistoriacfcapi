@@ -62,9 +62,13 @@ public class CFCController {
         cFCService.salvar(cFC);
         HashMap<Object, Object> response = new HashMap<>();
         HashMap<Object, Object> result = new HashMap<>();
-        
-        result.put("nome", dto.getNome());
-        result.put("cnpj", dto.getCnpj());            
+                
+        result.put("cnpj", dto.getCnpj());   
+        result.put("centroDeFormacao", dto.getCentroDeFormacao());  
+        result.put("fantasia", dto.getFantasia());
+        result.put("tipo", dto.getTipo());
+        result.put("telefone", dto.getTelefone());
+        result.put("email", dto.getEmail());               
 
         response.put("result", result);
         return ResponseEntity.status(HttpStatus.CREATED).body(CFCMapper.toDto(cFC));

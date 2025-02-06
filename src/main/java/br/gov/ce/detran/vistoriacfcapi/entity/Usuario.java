@@ -1,6 +1,7 @@
 package br.gov.ce.detran.vistoriacfcapi.entity;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -12,6 +13,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 
 @Getter @Setter
@@ -22,11 +24,22 @@ public class Usuario extends Entidade implements Serializable {
 
     private static final long serialVersionUID = 1L;
 		
-    @Column(name = "username", nullable = false, unique = true, length = 100)
+    @Column(name = "username", nullable = true, unique = true, length = 100)
 	private String username;
 	
 	@Column(name = "password", nullable = false, length = 200)
 	private String password;
+
+	@Column(name = "ultimo_login")
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+	private LocalDateTime ultimoLogin;
+
+	@Column(name = "status")
+	private String status;
+
+	@Column(name = "active")
+	private Boolean active;
+
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "role", nullable = false, length = 25)
@@ -36,4 +49,6 @@ public class Usuario extends Entidade implements Serializable {
 	
 		ROLE_ADMIN, ROLE_VISTORIADOR
 	}
+
+   
 }

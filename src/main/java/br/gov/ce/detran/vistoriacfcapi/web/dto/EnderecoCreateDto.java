@@ -13,10 +13,10 @@ import lombok.Setter;
 public class EnderecoCreateDto {
 
 
-    @NotBlank(message = "O campo 'logradouro' não pode estar em branco.")
-    private String logradouro;
+    @NotBlank(message = "O campo 'Endereço' não pode estar em branco.")
+    private String endereco;   
 
-    @NotBlank(message = "O campo 'numero' não pode estar em branco.")
+    @NotBlank(message = "O campo 'Numero' não pode estar em branco.")
     private String numero;
 
     @NotBlank(message = "O campo 'bairro' não pode estar em branco.")
@@ -25,6 +25,9 @@ public class EnderecoCreateDto {
     @NotBlank(message = "O campo 'cidade' não pode estar em branco.")
     private String cidade;
 
+    @NotBlank(message = "O campo 'Estado' não pode estar em branco.")
+    private String estado;
+
     @NotBlank(message = "O campo 'cep' não pode estar em branco.")
     private String cep;
     
@@ -32,6 +35,10 @@ public class EnderecoCreateDto {
     private TipoEndereco tipoEndereco;
     
     private String complemento;
+
+    
+    
+    
     
    
 }
