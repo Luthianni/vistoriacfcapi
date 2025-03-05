@@ -2,7 +2,7 @@ package br.gov.ce.detran.vistoriacfcapi.web.dto;
 
 import java.time.LocalDateTime;
 
-import jakarta.validation.constraints.NotNull;
+import br.gov.ce.detran.vistoriacfcapi.entity.Agendamento;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +15,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AgendamentoResponseDto {
+    
     private Long id;
     private Long cfcId;
     private LocalDateTime dataHoraAgendamento;    
@@ -23,6 +24,10 @@ public class AgendamentoResponseDto {
     private LocalDateTime dataHoraPreferencia;
     private String tipoVistoria;
     private boolean primeiraVistoria;
-    private String observacoes;  
+    private String observacoes;
+    
+    public AgendamentoResponseDto(Agendamento agendamento) {
+        
+    }
 
 }

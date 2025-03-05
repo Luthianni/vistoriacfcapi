@@ -36,4 +36,7 @@ public class ProfileCreateDto {
     @Size(min = 8, max = 11)
     private String telefone;
 
+    private String foto;
+
+    private String fotoBase64;
 }

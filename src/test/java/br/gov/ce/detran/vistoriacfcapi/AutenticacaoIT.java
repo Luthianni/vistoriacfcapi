@@ -34,7 +34,8 @@ public class AutenticacaoIT {
         org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
     }
 
-    @Test
+    @SuppressWarnings("null")
+@Test
     public void autenticar_ComCredenciaisInvalidas_RetornarErrorMessageStatus400() {
         ErrorMessage responseBody = testClient
                 .post()
@@ -75,8 +76,10 @@ public class AutenticacaoIT {
                 .expectBody(ErrorMessage.class)
                 .returnResult().getResponseBody();
 
-        org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
-        org.assertj.core.api.Assertions.assertThat(responseBody.getStatus()).isEqualTo(422);
+                org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
+                if (responseBody != null) {
+                    org.assertj.core.api.Assertions.assertThat(responseBody.getStatus()).isEqualTo(422);
+                }
 
         responseBody = testClient
                 .post()
@@ -88,8 +91,10 @@ public class AutenticacaoIT {
                 .expectBody(ErrorMessage.class)
                 .returnResult().getResponseBody();
 
-        org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
-        org.assertj.core.api.Assertions.assertThat(responseBody.getStatus()).isEqualTo(422);
+                org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
+                if (responseBody != null) {
+                    org.assertj.core.api.Assertions.assertThat(responseBody.getStatus()).isEqualTo(422);
+                }
     }
 
     @Test
@@ -104,8 +109,10 @@ public class AutenticacaoIT {
                 .expectBody(ErrorMessage.class)
                 .returnResult().getResponseBody();
 
-        org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
-        org.assertj.core.api.Assertions.assertThat(responseBody.getStatus()).isEqualTo(422);
+                org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
+                if (responseBody != null) {
+                    org.assertj.core.api.Assertions.assertThat(responseBody.getStatus()).isEqualTo(422);
+                }
 
         responseBody = testClient
                 .post()
@@ -117,8 +124,10 @@ public class AutenticacaoIT {
                 .expectBody(ErrorMessage.class)
                 .returnResult().getResponseBody();
 
-        org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
-        org.assertj.core.api.Assertions.assertThat(responseBody.getStatus()).isEqualTo(422);
+                org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
+                if (responseBody != null) {
+                    org.assertj.core.api.Assertions.assertThat(responseBody.getStatus()).isEqualTo(422);
+                }
 
         responseBody = testClient
                 .post()
@@ -129,9 +138,10 @@ public class AutenticacaoIT {
                 .expectStatus().isEqualTo(422)
                 .expectBody(ErrorMessage.class)
                 .returnResult().getResponseBody();
-
-        org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
-        org.assertj.core.api.Assertions.assertThat(responseBody.getStatus()).isEqualTo(422);
+                org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
+                if (responseBody != null) {
+                    org.assertj.core.api.Assertions.assertThat(responseBody.getStatus()).isEqualTo(422);
+                }
         }
 
 

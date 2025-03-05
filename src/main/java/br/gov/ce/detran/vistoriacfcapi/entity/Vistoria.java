@@ -3,6 +3,8 @@ package br.gov.ce.detran.vistoriacfcapi.entity;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
@@ -20,21 +22,19 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
+@SuppressWarnings("deprecation")
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "vistorias")
+@SQLDelete(sql = "UPDATE agendamentos SET ativo = false WHERE id = ?")
+@Where(clause = "ativo = true")
 @EntityListeners(AuditingEntityListener.class)
 public class Vistoria extends Entidade implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
-      
-    @Column(name = "data_agendada", nullable = false)
-    @DateTimeFormat(iso = ISO.DATE)
-    private LocalDate dataAgendada;
-
     @ManyToOne
     @JoinColumn(name = "id_cfc_fk", nullable = true)
     private CFC cFC;       
@@ -50,6 +50,10 @@ public class Vistoria extends Entidade implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "id_vistoriador2_fk", nullable = false)
 	private Usuario vistoriador2;
+      
+    @Column(name = "data_agendada", nullable = false)
+    @DateTimeFormat(iso = ISO.DATE)
+    private LocalDate dataAgendada;    
 
 	@Column(name = "salas", nullable = false)
     private boolean sala;
@@ -74,11 +78,7 @@ public class Vistoria extends Entidade implements Serializable {
     @JoinColumn(name = "agendamento_id")
     private Agendamento agendamento;
 
-
-    public void setUsuario(Usuario buscarPorId) {
-        
-        throw new UnsupportedOperationException("Unimplemented method 'setUsuario'");
+    public void setUsuario(Usuario usuario) {
     }
-
    	
 }

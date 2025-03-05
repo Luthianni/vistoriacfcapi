@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @Configuration
 public class SpringJpaAuditingConfig implements AuditorAware<String> {
 
+    @SuppressWarnings("null")
     @Override
     public Optional<String> getCurrentAuditor() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

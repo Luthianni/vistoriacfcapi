@@ -1,15 +1,15 @@
 package br.gov.ce.detran.vistoriacfcapi.repository;
 
-import br.gov.ce.detran.vistoriacfcapi.entity.Agendamento;
-import br.gov.ce.detran.vistoriacfcapi.entity.StatusAgendamento;
+import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import br.gov.ce.detran.vistoriacfcapi.entity.Agendamento;
+import br.gov.ce.detran.vistoriacfcapi.entity.StatusAgendamento;
 
 @Repository
 public interface AgendamentoRepository extends JpaRepository<Agendamento, Long> {
@@ -40,4 +40,6 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, Long> 
             "AND a.status NOT IN ('CANCELADO') " +
             "AND a.ativo = true")
     long countAgendamentosNoPeriodo(Long cfc, LocalDateTime inicio, LocalDateTime fim);
+
+//     boolean isAvailable(Long id, LocalDateTime dataHoraAgendamento);
 }

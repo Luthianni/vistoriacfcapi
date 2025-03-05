@@ -42,7 +42,8 @@ public class SpringSecurityConfig {
                         .requestMatchers(HttpMethod.POST, "api/v1/profile").permitAll()
                         .requestMatchers(HttpMethod.POST, "api/v1/validateToken").permitAll()
                         .requestMatchers(HttpMethod.POST, "api/v1/agendamento").authenticated()
-                        .requestMatchers(HttpMethod.GET, "api/v1/{id}").authenticated()                        
+                        .requestMatchers(HttpMethod.GET, "api/v1/{id}").authenticated()
+                        .requestMatchers(HttpMethod.GET, "centroFormacaoCondutores/cnpj/**").authenticated()
                         .requestMatchers(DOCUMENTATION_OPENAPI).permitAll()
                         .anyRequest().authenticated()
                 ).sessionManagement(

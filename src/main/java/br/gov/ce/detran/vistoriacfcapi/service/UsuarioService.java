@@ -3,6 +3,8 @@ package br.gov.ce.detran.vistoriacfcapi.service;
 import java.util.List;
 import java.util.Optional;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,8 @@ import br.gov.ce.detran.vistoriacfcapi.exception.UsernameUniqueViolationExceptio
 import br.gov.ce.detran.vistoriacfcapi.repository.UsuarioRepository;
 import lombok.extern.slf4j.Slf4j;
 
+@Getter
+@Setter
 @Slf4j
 @Service
 public class UsuarioService {

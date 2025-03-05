@@ -14,4 +14,5 @@ public class ProfileResponseDto {
     private String matricula;
     private String email;
     private String telefone;
+    private String foto;
 }

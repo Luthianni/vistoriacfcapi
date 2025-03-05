@@ -9,6 +9,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -17,10 +18,7 @@ import java.util.Set;
 
 @SuppressWarnings("deprecation")
 @Entity
-@Table(name = "agendamentos", indexes = {
-        @Index(name = "idx_cfc_data", columnList = "id_cfc,data_hora_agendamento"),
-        @Index(name = "idx_status", columnList = "status")
-})
+@Table(name = "agendamentos")
 @SQLDelete(sql = "UPDATE agendamentos SET ativo = false WHERE id = ?")
 @Where(clause = "ativo = true")
 @EntityListeners(AuditingEntityListener.class)
@@ -43,11 +41,11 @@ public class Agendamento extends Entidade implements Serializable {
     private Endereco endereco;
 
     @Column(name = "data_hora_agendamento")
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @DateTimeFormat(iso = ISO.DATE)
     private LocalDateTime dataHoraAgendamento;
 
     @Column(name = "data_hora_preferencia")
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @DateTimeFormat(iso = ISO.DATE)
     private LocalDateTime dataHoraPreferencia;
 
     @Enumerated(EnumType.STRING)

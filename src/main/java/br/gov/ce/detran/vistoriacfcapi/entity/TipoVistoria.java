@@ -16,7 +16,6 @@ public enum TipoVistoria {
     }
 
     public String toUpperCase() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'toUpperCase'");
+         throw new UnsupportedOperationException("Unimplemented method 'toUpperCase'");
     }
 }

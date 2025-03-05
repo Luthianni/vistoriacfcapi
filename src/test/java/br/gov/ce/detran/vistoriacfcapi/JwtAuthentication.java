@@ -21,6 +21,7 @@ public class JwtAuthentication {
         }
     }
 
+    @SuppressWarnings("null")
     private static String authenticateAndGetToken(WebTestClient client, UsuarioLoginDto usuarioLoginDto) {
         return client
             .post()

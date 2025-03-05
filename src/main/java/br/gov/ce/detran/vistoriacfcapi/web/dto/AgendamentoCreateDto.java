@@ -3,7 +3,6 @@ package br.gov.ce.detran.vistoriacfcapi.web.dto;
 
 import java.time.LocalDateTime;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

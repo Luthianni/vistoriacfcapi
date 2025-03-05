@@ -1,13 +1,15 @@
 package br.gov.ce.detran.vistoriacfcapi.entity;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Lob;
 import jakarta.persistence.MappedSuperclass;
 
 
 @MappedSuperclass
 public abstract class Pessoa extends Entidade{
-    
-			
+
+
+
 	@Column(name = "nome", nullable = false, length = 200)
 	private String nome;
 
@@ -23,7 +25,13 @@ public abstract class Pessoa extends Entidade{
 	@Column(name = "telefone", nullable = false, length = 11)
 	private String telefone;
 
+	@Lob
+	@Column(name = "foto", nullable = true)
+	private String foto;
 
+	@Lob
+	@Column(name = "fotoBase64", nullable = true)
+	private String fotoBase64;
 
 	
 	public String getNome() {
@@ -66,5 +74,10 @@ public abstract class Pessoa extends Entidade{
 		this.telefone = telefone;
 	}
 
-   
+	public String getFoto() {return foto;}
+
+   public void setFoto(String foto) {this.foto = foto;}
+
+	public String getFotoBase64() {return fotoBase64;}
+	public void setFotoBase64(String fotoBase64) {this.fotoBase64 = fotoBase64;}
 }

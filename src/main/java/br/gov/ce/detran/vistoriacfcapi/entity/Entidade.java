@@ -24,9 +24,7 @@ public abstract class Entidade {
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Long id;
-
-	
+	private Long id;	
 
     @CreatedDate
 	@Column(name = "data_criacao")

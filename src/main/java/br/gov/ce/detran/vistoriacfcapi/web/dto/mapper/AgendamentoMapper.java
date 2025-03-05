@@ -1,52 +1,29 @@
 package br.gov.ce.detran.vistoriacfcapi.web.dto.mapper;
 
+import java.util.List;
+import java.util.stream.Collectors;
 
-
-import org.springframework.stereotype.Component;
-
+import org.modelmapper.ModelMapper;
 import br.gov.ce.detran.vistoriacfcapi.entity.Agendamento;
-import br.gov.ce.detran.vistoriacfcapi.entity.CFC;
-import br.gov.ce.detran.vistoriacfcapi.entity.Endereco;
-import br.gov.ce.detran.vistoriacfcapi.entity.TipoVistoria;
-import br.gov.ce.detran.vistoriacfcapi.entity.Usuario;
 import br.gov.ce.detran.vistoriacfcapi.web.dto.AgendamentoCreateDto;
+import br.gov.ce.detran.vistoriacfcapi.web.dto.AgendamentoResponseDto;
+import lombok.NoArgsConstructor;
+import lombok.AccessLevel;
 
-@Component
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AgendamentoMapper {
-    
-    public Agendamento toAgendamento(AgendamentoCreateDto dto) {
-        if (dto == null) {
-            return null;
-        }
-        
-        Agendamento agendamento = new Agendamento();
-        
-        if (dto.getCfcId() != null) {
-            CFC cfc = new CFC();
-            cfc.setId(dto.getCfcId());
-            agendamento.setCFC(cfc);
-        }
-        
-        if (dto.getUsuarioId() != null) {
-            Usuario usuario = new Usuario();
-            usuario.setId(dto.getUsuarioId());
-            agendamento.setUsuario(usuario);
-        }
-
-        if (dto.getEnderecoId() != null) {
-            Endereco endereco = new Endereco();
-            endereco.setId(dto.getEnderecoId());
-            agendamento.setEndereco(endereco);
-        }
-        
-        agendamento.setDataHoraAgendamento(dto.getDataHoraAgendamento());
-        agendamento.setDataHoraPreferencia(dto.getDataHoraPreferencia());
-        if (dto.getTipoVistoria() != null) {
-            agendamento.setTipoVistoria(TipoVistoria.valueOf(dto.getTipoVistoria().toUpperCase()));
-        }
-        agendamento.setPrimeiraVistoria(dto.isPrimeiraVistoria());
-        agendamento.setObservacoes(dto.getObservacoes());
-        
-        return agendamento;
+          
+    public static Agendamento toAgendamento(AgendamentoCreateDto dto) {
+        return new ModelMapper().map(dto, Agendamento.class);
     }
+
+    public static AgendamentoResponseDto toDto(Agendamento agendamento) {
+        return new ModelMapper().map(agendamento, AgendamentoResponseDto.class);
+    }
+
+    public static List<AgendamentoResponseDto> toListDto(List<Agendamento> agendamentos) {
+        return agendamentos.stream().map(agendamento -> toDto(agendamento)).collect(Collectors.toList());
+    }
+
+    
 }

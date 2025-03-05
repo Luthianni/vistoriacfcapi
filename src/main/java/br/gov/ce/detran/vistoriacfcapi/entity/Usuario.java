@@ -3,6 +3,8 @@ package br.gov.ce.detran.vistoriacfcapi.entity;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import jakarta.persistence.Column;
@@ -16,9 +18,12 @@ import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 
+@SuppressWarnings("deprecation")
 @Getter @Setter
 @Entity
 @Table(name = "usuarios")
+@SQLDelete(sql = "UPDATE agendamentos SET ativo = false WHERE id = ?")
+@Where(clause = "ativo = true")
 @EntityListeners(AuditingEntityListener.class)
 public class Usuario extends Entidade implements Serializable {
 
@@ -40,6 +45,8 @@ public class Usuario extends Entidade implements Serializable {
 	@Column(name = "active")
 	private Boolean active;
 
+	@Column(nullable = false)
+    private boolean ativo = true;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "role", nullable = false, length = 25)

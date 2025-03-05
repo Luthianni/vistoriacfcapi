@@ -9,8 +9,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,11 +17,10 @@ import lombok.Setter;
 @Entity
 @Table(name = "endereco")
 @EntityListeners(AuditingEntityListener.class)
-public class Endereco extends Entidade implements Serializable{
-	
-	private static final long serialVersionUID = 1L;
-	
-    
+public class Endereco extends Entidade implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     @Column(name = "cidade", nullable = false)
     private String cidade;
 
@@ -43,41 +40,35 @@ public class Endereco extends Entidade implements Serializable{
     private String numero;
 
     private String complemento;
-    
-    @OneToOne
-    @JoinColumn(name = "id_cfc_fk", nullable = true)
-    private CFC cFC;
-    
+
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo_endereco")
     private TipoEndereco tipoEndereco;
 
-    
     @Override
     public String toString() {
         StringBuilder enderecoCompleto = new StringBuilder();
         enderecoCompleto.append(endereco)
-                        .append(", nº ")
-                        .append(numero)
-                        .append(", ")
-                        .append(complemento)
-                        .append(" _ ")
-                        .append(bairro)
-                        .append(". ")
-                        .append(cidade)
-                        .append(" - ")
-                        .append(estado)
-                        .append(". CEP: ")
-                        .append(cep);
+                .append(", nº ")
+                .append(numero);
+        if (complemento != null && !complemento.isEmpty()) {
+            enderecoCompleto.append(", ").append(complemento);
+        }
+        enderecoCompleto.append(" - ")
+                .append(bairro)
+                .append(". ")
+                .append(cidade)
+                .append(" - ")
+                .append(estado)
+                .append(". CEP: ")
+                .append(cep);
         return enderecoCompleto.toString();
     }
-	
 
+    public void setUsuario(Usuario usuario) {
+    }
 
-    public void setUsuario(Usuario buscarPorId) {
-		
-		
-	}
-    
+    public void setCFC(CFC cfc) {
 
+    }
 }

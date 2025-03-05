@@ -4,11 +4,12 @@ package br.gov.ce.detran.vistoriacfcapi.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import br.gov.ce.detran.vistoriacfcapi.repository.EnderecoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.gov.ce.detran.vistoriacfcapi.entity.CFC;
+import br.gov.ce.detran.vistoriacfcapi.entity.Endereco;
 import br.gov.ce.detran.vistoriacfcapi.exception.CnpjUniqueViolationException;
 import br.gov.ce.detran.vistoriacfcapi.repository.CFCRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -23,19 +24,20 @@ import lombok.Setter;
 public class CFCService {
     
     private final CFCRepository cFCRepository;
-
+    private final EnderecoRepository enderecoRepository;
     
     @Transactional
-    public CFC salvar(CFC cFC) {
-        String cnpj = cFC.getCnpj();
+    public CFC salvar(CFC cfc) {
+        // Salva o endereço se ele ainda não tiver um ID
+        if (cfc.getEndereco() != null && cfc.getEndereco().getId() == null) {
+            Endereco savedEndereco = enderecoRepository.save(cfc.getEndereco());
+            cfc.setEndereco(savedEndereco);
+        }
+        return cFCRepository.save(cfc);
+    }
 
-        // if(cFCRepository.findByCnpj(cnpj)) {
-        //     throw new CnpjUniqueViolationException(
-        //         String.format("CNPJ '%s não pode ser cadastrado, já existe no sistema", cnpj)
-        //     );
-        // }
-
-        return cFCRepository.save(cFC);
+    public CFC buscarPorCnpj(String cnpj) {
+        return cFCRepository.findByCnpj(cnpj);
     }
 
     @Transactional(readOnly = true)
@@ -47,11 +49,16 @@ public class CFCService {
     @Transactional(readOnly = true)
     public List<CFC> buscarTodos() {
         return cFCRepository.findAll();
-    }  
-
-    public Optional<CFC> buscarPorCnpj(String cnpj) {
-        return cFCRepository.findByCnpj(cnpj);
     }
 
    
+    public Optional<Endereco> existsByCnpj(String cnpj) {
+        
+        throw new UnsupportedOperationException("Unimplemented method 'existsByCnpj'");
+    }
+
+    
+    
+
+     
 }
