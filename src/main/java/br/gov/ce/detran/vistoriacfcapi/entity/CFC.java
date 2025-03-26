@@ -18,7 +18,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @SuppressWarnings("deprecation")
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "cfc")
@@ -41,10 +42,10 @@ public class CFC extends Entidade implements Serializable {
     @Column(name = "cnpj", nullable = false, unique = true, length = 14)
     private String cnpj;  
 
-    @Column(name = "centroDeFormacao", nullable = false, length = 100)
+    @Column(name = "centro_de_Formacao", nullable = false, length = 100)
     private String centroDeFormacao;
 
-    @Column(name = "nome_fantasia", nullable = false, length = 100)
+    @Column(name = "nome_Fantasia", nullable = false, length = 100)
     private String fantasia;
 
     @Column(name = "tipo", nullable = false, length = 100)

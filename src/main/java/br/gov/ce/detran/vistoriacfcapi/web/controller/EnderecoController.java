@@ -2,6 +2,7 @@ package br.gov.ce.detran.vistoriacfcapi.web.controller;
 
 import java.util.HashMap;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -29,64 +30,48 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-
+@Slf4j
 @Tag(name = "Endereco", description = "Contem todas as operações relativas ao recurso de Endereço.")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("api/v1/enderecos")
 public class EnderecoController {
 
-    
     private final EnderecoService enderecoService;
-    private final UsuarioService usuarioService;
-    private final CFCService cfcService;
 
-    @Operation(summary = "Criar um novo endereço", description = "Recurso para criar um novo endereço vinculado ao CFC e a um usuário cadastrado. " +
+    @Operation(summary = "Criar um novo endereço", description = "Recurso para criar um novo endereço. " +
             "Requisição exige uso de um bearer token.'",
-			responses = {
-				@ApiResponse(responseCode = "201", description = "Recurso criado com sucesso", 
-				content = @Content(mediaType = "Application/json;charset=UTF-8", schema = @Schema(implementation = EnderecoResponseDto.class))),
-				@ApiResponse(responseCode = "409", description = "Endereço já possui cadastrado no sistema",
-						content = @Content(mediaType = "Application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
-				@ApiResponse(responseCode = "422", description = "Recurso não processados por falta de dados ou dados invalidos",
-						content = @Content(mediaType = "Application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
-                @ApiResponse(responseCode = "403", description = "Recurso não permiti ao perfil SERVIDOR",
-                        content = @Content(mediaType = "Application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
-			}
-	)
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Recurso criado com sucesso",
+                            content = @Content(mediaType = "Application/json;charset=UTF-8", schema = @Schema(implementation = EnderecoResponseDto.class))),
+                    @ApiResponse(responseCode = "409", description = "Endereço já possui cadastrado no sistema",
+                            content = @Content(mediaType = "Application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "422", description = "Recurso não processados por falta de dados ou dados inválidos",
+                            content = @Content(mediaType = "Application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "403", description = "Recurso não permitido ao perfil SERVIDOR",
+                            content = @Content(mediaType = "Application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class)))
+            }
+    )
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<EnderecoResponseDto> create(@RequestBody @Valid EnderecoCreateDto dto,
-            @AuthenticationPrincipal JwtUserDetails userDetails) {    
-    	CFC cfc = cfcService.buscarPorId(userDetails.getId());
-    	Endereco endereco = EnderecoMapper.toEndereco(dto);
-        endereco.setUsuario(usuarioService.buscarPorId(userDetails.getId()));
-        endereco.setCFC(cfc);
-        enderecoService.salvar(endereco);
+                                                      @AuthenticationPrincipal JwtUserDetails userDetails) {
+        log.info("Recebendo solicitação para criar endereço: {}", dto);
 
-        HashMap<Object, Object> response = new HashMap<>();
-        HashMap<Object, Object> result = new HashMap<>();
+        // Mapeia o DTO para a entidade Endereco
+        Endereco endereco = EnderecoMapper.toEndereco(dto);
 
-        result.put("endereco", dto.getEndereco());
-        result.put("numero", dto.getNumero());
-        result.put("bairro", dto.getBairro());
-        result.put("cidade", dto.getCidade());
-        result.put("estado", dto.getEstado());
-        result.put("cep", dto.getCep());
-        result.put("complemento", dto.getComplemento());
+        // Salva o endereço
+        Endereco savedEndereco = enderecoService.salvar(endereco);
 
-        response.put("result", result);
-        return ResponseEntity.status(201).body(EnderecoMapper.toDto(endereco));
+        // Retorna o DTO mapeado
+        return ResponseEntity.status(201).body(EnderecoMapper.toDto(savedEndereco));
     }
-    
-
 
     @GetMapping("/{id}")
     public ResponseEntity<EnderecoResponseDto> getById(@PathVariable Long id) {
         Endereco endereco = enderecoService.buscarPorId(id);
         return ResponseEntity.ok(EnderecoMapper.toDto(endereco));
-        
     }
-    
 }

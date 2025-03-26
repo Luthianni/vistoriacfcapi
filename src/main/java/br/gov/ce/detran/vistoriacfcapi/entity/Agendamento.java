@@ -1,16 +1,14 @@
 package br.gov.ce.detran.vistoriacfcapi.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
+import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -26,6 +24,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 public class Agendamento extends Entidade implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @ManyToOne
@@ -36,16 +35,16 @@ public class Agendamento extends Entidade implements Serializable {
     @JoinColumn(name = "id_cfc_fk", nullable = true)
     private CFC cFC;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST) // Adicionado cascateamento
     @JoinColumn(name = "id_endereco_fk", nullable = false)
     private Endereco endereco;
 
     @Column(name = "data_hora_agendamento")
-    @DateTimeFormat(iso = ISO.DATE)
+    @DateTimeFormat(iso = ISO.DATE_TIME)
     private LocalDateTime dataHoraAgendamento;
 
     @Column(name = "data_hora_preferencia")
-    @DateTimeFormat(iso = ISO.DATE)
+    @DateTimeFormat(iso = ISO.DATE_TIME)
     private LocalDateTime dataHoraPreferencia;
 
     @Enumerated(EnumType.STRING)

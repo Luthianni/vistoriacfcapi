@@ -1,13 +1,12 @@
 package br.gov.ce.detran.vistoriacfcapi.web.dto;
 
+import br.gov.ce.detran.vistoriacfcapi.entity.TipoVistoria;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 import java.time.LocalDateTime;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 @Getter
 @Setter
@@ -15,33 +14,44 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class AgendamentoCreateDto {
-    private Long cfcId;
+
+    @NotBlank(message = "Endereço é obrigatório")
+    private String endereco;
+
+    @NotBlank(message = "Número é obrigatório")
+    private String numero;
+
+    @NotBlank(message = "Bairro é obrigatório")
+    private String bairro;
+
+    @NotBlank(message = "CEP é obrigatório")
+    private String cep;
+
+    @NotBlank(message = "Cidade é obrigatória")
+    private String cidade;
+
+    @NotBlank(message = "Estado é obrigatório")
+    private String estado;
+
+    @NotNull(message = "Data e hora do agendamento são obrigatórias")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private LocalDateTime dataHoraAgendamento;
-    
+
+    @NotNull(message = "Data e hora do agendamento Preferencial")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    private LocalDateTime DataHoraPreferencia;
+
+    @NotNull(message = "CFC ID é obrigatório")
+    private Long cfcId;
+
+    @NotNull(message = "Usuário ID é obrigatório")
     private Long usuarioId;
-    private Long enderecoId;
-    private LocalDateTime dataHoraPreferencia;
-    private String tipoVistoria;
-    private boolean primeiraVistoria;
+
+    @NotNull(message = "Tipo de vistoria é obrigatório")
+    private TipoVistoria tipoVistoria;
+
     private String observacoes;
 
-      // Fields for CFC data
-      private String centroDeFormacao;
-      private String fantasia;
-      private String cnpj;
-      private String tipo;
-      private String telefone;
-      private String email;
-  
-      // Fields for Endereco data
-      private String endereco;
-      private String numero;
-      private String bairro;
-      private String cidade;
-      private String estado;
-      private String cep;
-   
-    
+    @NotNull(message = "Primeira vistoria é obrigatória")
+    private Boolean primeiraVistoria;
 }
-
-

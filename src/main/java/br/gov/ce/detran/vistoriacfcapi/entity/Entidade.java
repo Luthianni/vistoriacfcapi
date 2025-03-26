@@ -3,6 +3,7 @@ package br.gov.ce.detran.vistoriacfcapi.entity;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -74,6 +75,7 @@ public abstract class Entidade {
 	public String toString() {
 		return String.format("%s [id=%d]", this.getClass().getName(), getId());
 	}
-	
-	
+
+
+
 }

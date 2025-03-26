@@ -13,7 +13,8 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter
+@Getter
+@Setter
 @Entity
 @Table(name = "endereco")
 @EntityListeners(AuditingEntityListener.class)
@@ -27,7 +28,7 @@ public class Endereco extends Entidade implements Serializable {
     @Column(name = "estado", nullable = false)
     private String estado;
 
-    @Column(name = "bairro", nullable = false)
+    @Column(name = "bairro")
     private String bairro;
 
     @Column(name = "endereco", nullable = false)
@@ -55,7 +56,7 @@ public class Endereco extends Entidade implements Serializable {
             enderecoCompleto.append(", ").append(complemento);
         }
         enderecoCompleto.append(" - ")
-                .append(bairro)
+                .append(bairro != null ? bairro : "Não informado")
                 .append(". ")
                 .append(cidade)
                 .append(" - ")
@@ -63,12 +64,5 @@ public class Endereco extends Entidade implements Serializable {
                 .append(". CEP: ")
                 .append(cep);
         return enderecoCompleto.toString();
-    }
-
-    public void setUsuario(Usuario usuario) {
-    }
-
-    public void setCFC(CFC cfc) {
-
     }
 }

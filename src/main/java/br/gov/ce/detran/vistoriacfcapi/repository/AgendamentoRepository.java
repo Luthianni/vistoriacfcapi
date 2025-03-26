@@ -1,6 +1,8 @@
 package br.gov.ce.detran.vistoriacfcapi.repository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -41,5 +43,10 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, Long> 
             "AND a.ativo = true")
     long countAgendamentosNoPeriodo(Long cfc, LocalDateTime inicio, LocalDateTime fim);
 
-//     boolean isAvailable(Long id, LocalDateTime dataHoraAgendamento);
+    @Query("SELECT COUNT(a) FROM Agendamento a WHERE DATE(a.dataHoraAgendamento) = :date AND a.ativo = true")
+    long countByDataHoraAgendamentoDate(LocalDate date);
+
+    @Query("SELECT a FROM Agendamento a WHERE DATE(a.dataHoraAgendamento) = :date AND a.dataHoraAgendamento >= :horaInicio AND a.dataHoraAgendamento < :horaFim AND a.ativo = true")
+    List<Agendamento> findByDataHoraAgendamento(LocalDate date, LocalTime horaInicio, LocalTime horaFim);
 }
+
